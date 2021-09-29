@@ -1,4 +1,4 @@
-import './App.less'
+import './App.scss'
 import { Assignments } from './components'
 import { AppContext } from './AppContext'
 import Assignment from './types/Assignment'

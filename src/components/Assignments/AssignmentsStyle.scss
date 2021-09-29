@@ -1,19 +1,6 @@
-
 .Assignments {
-  form {
-    margin: 16px 0 16px 0;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-
-    .rs-form-group:last-child {
-      margin-right: 0;
-    }
-
-    & > div {
-      margin-bottom: 8px !important;
-    }
-  }
+  width: 100%;
+  max-width: var(--bp);
 
   & > :is(.assignment-rendu, .assignment-non-rendu) {
     padding: 16px;
@@ -29,12 +16,12 @@
   }
 
   .assignment-rendu {
-    background-color: rgba(#00ff00, .2);
-    box-shadow: 0 0 10px rgba(#00ff00, .2);
+    background-color: rgba(#00ff00, 0.2);
+    box-shadow: 0 0 10px rgba(#00ff00, 0.2);
   }
 
   .assignment-non-rendu {
-    background-color: rgba(#ff0000, .2);
-    box-shadow: 0 0 10px rgba(#ff0000, .2);
+    background-color: rgba(#ff0000, 0.2);
+    box-shadow: 0 0 10px rgba(#ff0000, 0.2);
   }
 }

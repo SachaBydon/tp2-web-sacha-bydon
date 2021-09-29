@@ -5,6 +5,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
 import { RiAddCircleLine } from 'react-icons/ri'
 import { useContextState } from '../../AppContext'
+import './AddAssignmentStyle.scss'
 
 export default function AddAssignment() {
   const { addAssignment: add } = useContextState()
@@ -18,9 +19,7 @@ export default function AddAssignment() {
     date: new Date(),
   }
 
-  const [formValue, setFormValue] = useState<FormData>(
-    defaultFormData
-  )
+  const [formValue, setFormValue] = useState<FormData>(defaultFormData)
   const [formVisible, setFormVisible] = useState(false)
 
   function onSubmit(e: any) {
@@ -33,9 +32,8 @@ export default function AddAssignment() {
     setFormVisible(false)
   }
 
-
   return (
-    <div style={{ marginBottom: 16, marginTop: 16 }}>
+    <div id="AddAssignment">
       {formVisible ? (
         <form onSubmit={onSubmit}>
           <FormGroup>
@@ -65,19 +63,24 @@ export default function AddAssignment() {
               disabled={!formValue.name.length || formValue.date === null}
               type="submit"
               startIcon={<RiAddCircleLine size="20px" />}
+              variant="contained"
+              disableElevation
             >
               Ajouter un devoir
             </Button>
           </FormGroup>
         </form>
       ) : (
-        <Button
-          onClick={() => setFormVisible(true)}
-          style={{ marginLeft: 'auto' }}
-          startIcon={<RiAddCircleLine size="20px" />}
-        >
-          Ajouter un devoir
-        </Button>
+        <div>
+          <Button
+            onClick={() => setFormVisible(true)}
+            startIcon={<RiAddCircleLine size="20px" />}
+            variant="contained"
+            disableElevation
+          >
+            Ajouter un devoir
+          </Button>
+        </div>
       )}
     </div>
   )
