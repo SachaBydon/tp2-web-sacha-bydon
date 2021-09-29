@@ -1,0 +1,40 @@
+
+.Assignments {
+  form {
+    margin: 16px 0 16px 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .rs-form-group:last-child {
+      margin-right: 0;
+    }
+
+    & > div {
+      margin-bottom: 8px !important;
+    }
+  }
+
+  & > :is(.assignment-rendu, .assignment-non-rendu) {
+    padding: 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    & > p {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .assignment-rendu {
+    background-color: rgba(#00ff00, .2);
+    box-shadow: 0 0 10px rgba(#00ff00, .2);
+  }
+
+  .assignment-non-rendu {
+    background-color: rgba(#ff0000, .2);
+    box-shadow: 0 0 10px rgba(#ff0000, .2);
+  }
+}
