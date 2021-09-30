@@ -8,7 +8,7 @@ import {
   CardContent,
   CardActions,
 } from '@mui/material'
-import { useContextState } from '../../AppContext'
+import { useAssignmentsContext } from '../../contexts/AssignmentsContext'
 
 type Props = {
   assignmentIndex: number | null
@@ -21,7 +21,7 @@ export default function AssignmentDetail({
   open,
   setModal,
 }: Props) {
-  const { assignments, setAssignmentRendu } = useContextState()
+  const { assignments, setAssignmentRendu } = useAssignmentsContext()
   const assignment =
     assignmentIndex !== null ? assignments[assignmentIndex] : null
 
@@ -37,7 +37,8 @@ export default function AssignmentDetail({
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 400,
+          width: 'calc(100% - 64px)',
+          maxWidth: '400px',
           outline: 'none',
         }}
       >

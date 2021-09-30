@@ -1,41 +1,51 @@
-import { useRef, useState, useEffect, ReactElement } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { FormGroup, TextField, Fab } from '@mui/material'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
-import { useContextState } from '../../AppContext'
+import { useAssignmentsContext } from '../../contexts/AssignmentsContext'
 import './AddAssignmentStyle.scss'
 import AddIcon from '@mui/icons-material/Add'
+import useForm from '../../hooks/useForm'
+import { useAuthContext } from '../../contexts/AuthContext'
 
 export default function AddAssignment() {
-  const { addAssignment: add } = useContextState()
+  const { addAssignment: add } = useAssignmentsContext()
   const firstInputRef: React.RefObject<HTMLInputElement> = useRef(null)
 
-  type FormData = {
-    name: string
-    date: Date | null
-  }
-  const defaultFormData: FormData = {
-    name: '',
-    date: new Date(),
-  }
+  const defaultFormData = { name: '', date: new Date() }
+  const { formValues, updateForm, clearForm, setValue } =
+    useForm(defaultFormData)
 
-  const [formValue, setFormValue] = useState<FormData>(defaultFormData)
+  const { admin } = useAuthContext()
+
   const [formVisible, setFormVisible] = useState(false)
 
   function onSubmit(e: any) {
     e.preventDefault()
     add({
-      nom: formValue.name,
-      dateDeRendu: formValue.date?.toLocaleDateString() ?? '',
+      nom: formValues.name,
+      dateDeRendu: formValues.date?.toLocaleDateString() ?? '',
     })
-    setFormValue(defaultFormData)
+    clearForm()
     setFormVisible(false)
   }
 
   useEffect(() => {
     if (formVisible) firstInputRef.current?.focus()
   }, [formVisible])
+
+  useEffect(() => {
+    function escape(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setFormVisible(false)
+      }
+    }
+    document.addEventListener('keydown', escape)
+    return () => {
+      document.removeEventListener('keydown', escape)
+    }
+  }, [])
 
   return (
     <div id="AddAssignment">
@@ -45,20 +55,17 @@ export default function AddAssignment() {
             name="name"
             label="Nom"
             inputRef={firstInputRef}
-            value={formValue.name}
-            onChange={(e) =>
-              setFormValue({ ...formValue, name: e.target.value })
-            }
+            value={formValues.name}
+            onChange={updateForm}
           />
         </FormGroup>
         <FormGroup>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Date de rendu"
-              value={formValue.date}
-              onChange={(date: Date | null) =>
-                setFormValue({ ...formValue, date })
-              }
+              value={formValues.date}
+              InputProps={{ name: 'date' }}
+              onChange={(date) => setValue('date', date)}
               renderInput={(params) => <TextField {...params} name="date" />}
             />
           </LocalizationProvider>
@@ -68,7 +75,7 @@ export default function AddAssignment() {
             color="primary"
             onClick={() => setFormVisible(true)}
             type="submit"
-            disabled={!formValue.name.length || formValue.date === null}
+            disabled={!formValues.name.length || formValues.date === null}
             variant="extended"
           >
             <AddIcon />
@@ -77,7 +84,7 @@ export default function AddAssignment() {
         </FormGroup>
       </form>
       <div className={formVisible ? 'hide' : ''}>
-        <Fab color="primary" onClick={() => setFormVisible(true)}>
+        <Fab color="primary" onClick={() => setFormVisible(true)} disabled={!admin}>
           <AddIcon />
         </Fab>
       </div>

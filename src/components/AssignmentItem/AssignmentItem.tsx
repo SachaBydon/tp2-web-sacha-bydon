@@ -1,5 +1,6 @@
 import Assignment from '../../types/Assignment'
-import { useContextState } from '../../AppContext'
+import { useAssignmentsContext } from '../../contexts/AssignmentsContext'
+import { useAuthContext } from '../../contexts/AuthContext'
 import {
   ListItem,
   ListItemAvatar,
@@ -25,8 +26,8 @@ export default function AssignmentItem({
   index,
   changeSelected,
 }: Props) {
-
-  const { deleteAssignment } = useContextState()
+  const { deleteAssignment } = useAssignmentsContext()
+  const { admin } = useAuthContext()
 
   return (
     <ListItem
@@ -37,6 +38,7 @@ export default function AssignmentItem({
             edge="end"
             aria-label="edit"
             onClick={() => changeSelected(index)}
+            disabled={!admin}
           >
             <EditIcon />
           </IconButton>
@@ -44,6 +46,7 @@ export default function AssignmentItem({
             edge="end"
             aria-label="delete"
             onClick={() => deleteAssignment(index)}
+            disabled={!admin}
           >
             <DeleteIcon />
           </IconButton>

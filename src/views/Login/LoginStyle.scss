@@ -1,0 +1,40 @@
+#Login {
+  width: calc(100% - 64px);
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: transparent;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 32px;
+
+  h1 {
+    margin-top: 0;
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    button {
+      margin-top: 16px;
+      gap: 8px;
+    }
+  }
+
+  .rotate-animation {
+    animation: 1.5s rotate infinite linear;
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

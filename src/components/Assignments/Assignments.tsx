@@ -5,13 +5,13 @@ import {
   AddAssignment,
   AssignmentItem,
 } from '../../components'
-import { useContextState } from '../../AppContext'
+import { useAssignmentsContext } from '../../contexts/AssignmentsContext'
 import { List } from '@mui/material'
 
 export default function Assignments() {
   const titre: string = 'Mon application sur les assignments'
 
-  const { assignments } = useContextState()
+  const { assignments } = useAssignmentsContext()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [openModale, setOpenModale] = useState<boolean>(false)
 

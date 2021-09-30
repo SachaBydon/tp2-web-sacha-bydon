@@ -8,10 +8,10 @@ export type AppContextType = {
   deleteAssignment: (i: number) => void
 }
 
-export const AppContext = createContext<AppContextType>({
+export const AssignmentsContext = createContext<AppContextType>({
   assignments: [],
   addAssignment: () => {},
   setAssignmentRendu: () => {},
   deleteAssignment: () => {},
 })
-export const useContextState = () => useContext(AppContext)
+export const useAssignmentsContext = () => useContext(AssignmentsContext)

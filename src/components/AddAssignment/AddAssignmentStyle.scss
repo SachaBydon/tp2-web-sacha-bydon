@@ -17,7 +17,7 @@
     .MuiInputBase-root {
       height: 48px;
     }
-    .MuiTextField-root > label{
+    .MuiTextField-root > label {
       top: -4px;
     }
   }
@@ -38,5 +38,15 @@
 
   button {
     box-shadow: none;
+  }
+
+  @media screen and (max-width: 700px) {
+    form {
+      flex-direction: column;
+
+      & > * {
+        width: 100%;
+      }
+    }
   }
 }
