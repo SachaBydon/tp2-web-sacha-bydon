@@ -4,8 +4,7 @@ import { AppContext } from './AppContext'
 import Assignment from './types/Assignment'
 import { useState } from 'react'
 import { createTheme } from '@mui/material/styles'
-import {ThemeProvider} from '@mui/material'
-
+import { ThemeProvider } from '@mui/material'
 
 // TODO: fix aliases
 function App() {
@@ -25,6 +24,11 @@ function App() {
       setAssignments(newAssignments)
     }
   }
+  function deleteAssignment(i: number) {
+    const newAssignments = [...assignments]
+    newAssignments.splice(i, 1)
+    setAssignments(newAssignments)
+  }
 
   const darkTheme = createTheme({
     palette: {
@@ -34,7 +38,12 @@ function App() {
 
   return (
     <AppContext.Provider
-      value={{ assignments, addAssignment, setAssignmentRendu }}
+      value={{
+        assignments,
+        addAssignment,
+        setAssignmentRendu,
+        deleteAssignment,
+      }}
     >
       <ThemeProvider theme={darkTheme}>
         <div className="App">

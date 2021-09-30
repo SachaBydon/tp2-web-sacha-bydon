@@ -14,12 +14,13 @@ import {
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 import { green, red } from '@mui/material/colors'
 
 export default function Assignments() {
   const titre: string = 'Mon application sur les assignments'
 
-  const { assignments } = useContextState()
+  const { assignments, deleteAssignment } = useContextState()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [openModale, setOpenModale] = useState<boolean>(false)
 
@@ -32,17 +33,19 @@ export default function Assignments() {
     <div className="Assignments">
       <h1>{titre}</h1>
       <AddAssignment />
-      <List>
+      <List className="list">
         {assignments.map((assignment, index) => (
           <ListItem
             key={index}
-            button
-            disableRipple
-            onClick={() => changeSelected(index)}
             secondaryAction={
-              <IconButton edge="end" aria-label="delete">
-                <DeleteIcon />
-              </IconButton>
+              <div className="actions">
+                <IconButton edge="end" aria-label="delete">
+                  <EditIcon onClick={() => changeSelected(index)} />
+                </IconButton>
+                <IconButton edge="end" aria-label="delete">
+                  <DeleteIcon onClick={() => deleteAssignment(index)} />
+                </IconButton>
+              </div>
             }
           >
             <ListItemAvatar>
