@@ -2,7 +2,6 @@ import {
   Button,
   Checkbox,
   Modal,
-  Box,
   Typography,
   FormControlLabel,
   Card,
@@ -36,24 +35,29 @@ export default function AssignmentDetail({
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    outline: 'none'
+    outline: 'none',
   }
 
   return (
     <Modal open={open} onClose={() => setModal(false)}>
-      <Card sx={style} >
+      <Card sx={style}>
         <CardContent>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {assignment?.nom}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            La date de rendu de ce devoir est fixé au {assignment?.dateDeRendu}.
-            {!assignment?.rendu && (
-              <FormControlLabel
-                style={{ display: 'block' }}
-                control={<Checkbox onChange={renduChanged} />}
-                label="Rendu"
-              />
+            {assignment?.rendu ? (
+              <>Ce devoir a été rendu le {assignment?.dateDeRendu}.</>
+            ) : (
+              <>
+                La date de rendu de ce devoir est fixé au{' '}
+                {assignment?.dateDeRendu}.
+                <FormControlLabel
+                  style={{ display: 'block' }}
+                  control={<Checkbox onChange={renduChanged} />}
+                  label="Rendu"
+                />
+              </>
             )}
           </Typography>
         </CardContent>
