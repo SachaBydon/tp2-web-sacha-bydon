@@ -67,34 +67,6 @@ export default function Assignments() {
           </ListItem>
         ))}
       </List>
-      {/* {assignments?.map((assignment, index) => {
-        return (
-          <Paper
-            variant="outlined"
-            key={index}
-            // style={{ color: assignment.rendu ? 'green' : 'red' }}
-            className={
-              assignment.rendu ? 'assignment-rendu' : 'assignment-non-rendu'
-            }
-            onClick={() => changeSelected(index)}
-          >
-            {assignment.rendu ? (
-              <p>
-                <RiCheckboxCircleLine size="20px" />
-                <span>
-                  Devoir intitulé {assignment.nom}, rendu le{' '}
-                  {assignment.dateDeRendu}
-                </span>
-              </p>
-            ) : (
-              <p>
-                <RiCloseCircleLine size="20px" />
-                <span>Le devoir {assignment.nom} n'a pas été rendu</span>
-              </p>
-            )}
-          </Paper>
-        )
-      })} */}
       <AssignmentDetail
         assignmentIndex={selectedIndex}
         open={openModale}
