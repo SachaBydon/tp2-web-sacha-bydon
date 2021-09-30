@@ -5,6 +5,9 @@ import {
   Box,
   Typography,
   FormControlLabel,
+  Card,
+  CardContent,
+  CardActions,
 } from '@mui/material'
 import { useContextState } from '../../AppContext'
 
@@ -33,30 +36,33 @@ export default function AssignmentDetail({
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    bgcolor: 'background.paper',
-    boxShadow: 12,
-    p: 4,
-    borderRadius: 2,
+    outline: 'none'
   }
 
   return (
     <Modal open={open} onClose={() => setModal(false)}>
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          {assignment?.nom}
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          La date de rendu de ce devoir est fixé au {assignment?.dateDeRendu}.
-          {!assignment?.rendu && (
-            <FormControlLabel
-              style={{ display: 'block' }}
-              control={<Checkbox onChange={renduChanged} />}
-              label="Rendu"
-            />
-          )}
-        </Typography>
-        <Button onClick={() => setModal(false)}>Valider</Button>
-      </Box>
+      <Card sx={style} >
+        <CardContent>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {assignment?.nom}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            La date de rendu de ce devoir est fixé au {assignment?.dateDeRendu}.
+            {!assignment?.rendu && (
+              <FormControlLabel
+                style={{ display: 'block' }}
+                control={<Checkbox onChange={renduChanged} />}
+                label="Rendu"
+              />
+            )}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small" onClick={() => setModal(false)}>
+            Valider
+          </Button>
+        </CardActions>
+      </Card>
     </Modal>
   )
 }

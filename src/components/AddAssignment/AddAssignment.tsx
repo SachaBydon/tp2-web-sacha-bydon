@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react'
-import { Button, FormGroup, TextField } from '@mui/material'
+import { useRef, useState, useEffect } from 'react'
+import { FormGroup, TextField, Fab } from '@mui/material'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
-import { RiAddCircleLine } from 'react-icons/ri'
 import { useContextState } from '../../AppContext'
 import './AddAssignmentStyle.scss'
+import AddIcon from '@mui/icons-material/Add'
 
 export default function AddAssignment() {
   const { addAssignment: add } = useContextState()
+  const firstInputRef = useRef(null)
 
   type FormData = {
     name: string
@@ -32,56 +33,70 @@ export default function AddAssignment() {
     setFormVisible(false)
   }
 
+  useEffect(() => {
+    if (formVisible) firstInputRef.current?.focus()
+  }, [formVisible])
+
   return (
     <div id="AddAssignment">
-      {formVisible ? (
-        <form onSubmit={onSubmit}>
-          <FormGroup>
-            <TextField
-              name="name"
-              label="Nom"
-              size="small"
-              onChange={(e) =>
-                setFormValue({ ...formValue, name: e.target.value })
+      <form onSubmit={onSubmit} className={formVisible ? '' : 'hide'}>
+        <FormGroup>
+          <TextField
+            name="name"
+            label="Nom"
+            inputRef={firstInputRef}
+            onChange={(e) =>
+              setFormValue({ ...formValue, name: e.target.value })
+            }
+          />
+        </FormGroup>
+        <FormGroup>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Date de rendu"
+              value={formValue.date}
+              onChange={(date: Date | null) =>
+                setFormValue({ ...formValue, date })
               }
+              renderInput={(params) => <TextField {...params} name="date" />}
             />
-          </FormGroup>
-          <FormGroup>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="Date de rendu"
-                value={formValue.date}
-                onChange={(date: Date | null) =>
-                  setFormValue({ ...formValue, date })
-                }
-                renderInput={(params) => <TextField {...params} name="date" />}
-              />
-            </LocalizationProvider>
-          </FormGroup>
-          <FormGroup>
-            <Button
-              disabled={!formValue.name.length || formValue.date === null}
-              type="submit"
-              startIcon={<RiAddCircleLine size="20px" />}
-              variant="contained"
-              disableElevation
-            >
-              Ajouter un devoir
-            </Button>
-          </FormGroup>
-        </form>
-      ) : (
-        <div>
-          <Button
-            onClick={() => setFormVisible(true)}
+          </LocalizationProvider>
+        </FormGroup>
+        <FormGroup>
+          {/* <Button
+            disabled={!formValue.name.length || formValue.date === null}
+            type="submit"
             startIcon={<RiAddCircleLine size="20px" />}
             variant="contained"
             disableElevation
           >
             Ajouter un devoir
-          </Button>
-        </div>
-      )}
+          </Button> */}
+          <Fab
+            color="primary"
+            onClick={() => setFormVisible(true)}
+            type="submit"
+            disabled={!formValue.name.length || formValue.date === null}
+            variant="extended"
+          >
+            <AddIcon />
+            Ajouter un devoir
+          </Fab>
+        </FormGroup>
+      </form>
+      <div className={formVisible ? 'hide' : ''}>
+        <Fab color="primary" onClick={() => setFormVisible(true)}>
+          <AddIcon />
+        </Fab>
+        {/* <Button
+          onClick={() => setFormVisible(true)}
+          startIcon={<RiAddCircleLine size="20px" />}
+          variant="contained"
+          disableElevation
+        >
+          Ajouter un devoir
+        </Button> */}
+      </div>
     </div>
   )
 }

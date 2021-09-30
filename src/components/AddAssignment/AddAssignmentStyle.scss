@@ -1,25 +1,21 @@
 #AddAssignment {
   form {
-    // margin: 16px 0 16px 0;
-    // display: flex;
-    // justify-content: space-between;
-    // flex-wrap: wrap;
-
-    // .rs-form-group:last-child {
-    //   margin-right: 0;
-    // }
-
-    // & > div {
-    //   margin-bottom: 8px !important;
-    // }
+    &.hide {
+      display: none;
+    }
 
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 16px;
     margin: 16px 0;
 
     & > :not(:last-child) {
       flex: 1;
+    }
+
+    .MuiInputBase-root {
+      height: 48px;
     }
   }
 
@@ -27,9 +23,17 @@
     margin: 16px 0;
     margin-left: auto;
     width: fit-content;
+
+    & > button {
+      width: 48px;
+      height: 48px;
+    }
+    &.hide {
+      display: none;
+    }
   }
 
   button {
-    height: 40px;
+    box-shadow: none;
   }
 }

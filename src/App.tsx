@@ -4,7 +4,6 @@ import { AppContext } from './AppContext'
 import Assignment from './types/Assignment'
 import { useState } from 'react'
 
-// TODO: change rsuit for MUI
 // TODO: fix aliases
 function App() {
   const [assignments, setAssignments] = useState<Assignment[]>([

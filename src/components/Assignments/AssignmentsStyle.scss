@@ -1,11 +1,12 @@
 .Assignments {
   width: 100%;
+  margin: 0 auto;
   max-width: var(--bp);
 
   & > :is(.assignment-rendu, .assignment-non-rendu) {
     padding: 16px;
     margin-bottom: 8px;
-    border-radius: 8px;
+    // border-radius: 8px;
     cursor: pointer;
 
     & > p {
@@ -15,13 +16,13 @@
     }
   }
 
-  .assignment-rendu {
-    background-color: rgba(#00ff00, 0.2);
-    box-shadow: 0 0 10px rgba(#00ff00, 0.2);
-  }
+  // .assignment-rendu {
+  //   background-color: rgba(#00ff00, 0.2);
+  //   box-shadow: 0 0 10px rgba(#00ff00, 0.2);
+  // }
 
-  .assignment-non-rendu {
-    background-color: rgba(#ff0000, 0.2);
-    box-shadow: 0 0 10px rgba(#ff0000, 0.2);
-  }
+  // .assignment-non-rendu {
+  //   background-color: rgba(#ff0000, 0.2);
+  //   box-shadow: 0 0 10px rgba(#ff0000, 0.2);
+  // }
 }

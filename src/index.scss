@@ -1,6 +1,6 @@
 
 :root {
-  --bp: 1000px;
+  --bp: 800px;
 }
 
 * {
@@ -23,9 +23,4 @@ button.icon-button {
   svg {
     margin-right: 8px;
   }
-}
-
-
-.MuiInputBase-root {
-  height: 40px;
 }
