@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add'
 
 export default function AddAssignment() {
   const { addAssignment: add } = useContextState()
-  const firstInputRef = useRef<ReactElement>(null)
+  const firstInputRef: React.RefObject<HTMLInputElement> = useRef(null)
 
   type FormData = {
     name: string
