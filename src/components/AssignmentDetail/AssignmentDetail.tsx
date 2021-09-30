@@ -40,6 +40,7 @@ export default function AssignmentDetail({
           width: 'calc(100% - 64px)',
           maxWidth: '400px',
           outline: 'none',
+          backgroundColor: 'var(--background)',
         }}
       >
         <CardContent>

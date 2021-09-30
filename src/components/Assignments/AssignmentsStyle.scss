@@ -3,8 +3,13 @@
   margin: 0 auto;
   max-width: var(--bp);
 
-  .list .actions {
-    display: flex;
-    gap: 12px;
+  .list {
+    max-height: calc(100vh - 230px);
+    overflow-y: auto;
+
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
   }
 }
