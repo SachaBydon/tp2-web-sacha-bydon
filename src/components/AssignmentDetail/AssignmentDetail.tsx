@@ -29,18 +29,18 @@ export default function AssignmentDetail({
     if (event.target.checked) setAssignmentRendu(assignmentIndex)
   }
 
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    outline: 'none',
-  }
-
   return (
     <Modal open={open} onClose={() => setModal(false)}>
-      <Card sx={style}>
+      <Card
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          outline: 'none',
+        }}
+      >
         <CardContent>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {assignment?.nom}
