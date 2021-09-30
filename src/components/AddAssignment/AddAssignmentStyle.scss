@@ -17,6 +17,9 @@
     .MuiInputBase-root {
       height: 48px;
     }
+    .MuiTextField-root > label{
+      top: -4px;
+    }
   }
 
   & > div {

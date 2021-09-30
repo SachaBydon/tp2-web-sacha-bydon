@@ -3,6 +3,9 @@ import { Assignments } from './components'
 import { AppContext } from './AppContext'
 import Assignment from './types/Assignment'
 import { useState } from 'react'
+import { createTheme } from '@mui/material/styles'
+import {ThemeProvider} from '@mui/material'
+
 
 // TODO: fix aliases
 function App() {
@@ -23,13 +26,21 @@ function App() {
     }
   }
 
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+    },
+  })
+
   return (
     <AppContext.Provider
       value={{ assignments, addAssignment, setAssignmentRendu }}
     >
-      <div className="App">
-        <Assignments />
-      </div>
+      <ThemeProvider theme={darkTheme}>
+        <div className="App">
+          <Assignments />
+        </div>
+      </ThemeProvider>
     </AppContext.Provider>
   )
 }
