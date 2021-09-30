@@ -23,7 +23,6 @@ export default function Assignments() {
   return (
     <div className="Assignments">
       <h1>{titre}</h1>
-      <AddAssignment />
       <List className="list">
         {assignments.map((assignment, index) => (
           <AssignmentItem
@@ -34,6 +33,7 @@ export default function Assignments() {
           />
         ))}
       </List>
+      <AddAssignment />
       <AssignmentDetail
         assignmentIndex={selectedIndex}
         open={openModale}
