@@ -1,6 +1,6 @@
-import Assignment from '../../types/Assignment'
-import { useAssignmentsContext } from '../../contexts/AssignmentsContext'
-import { useAuthContext } from '../../contexts/AuthContext'
+import Assignment from '@/types/Assignment'
+import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import {
   ListItem,
   ListItemAvatar,

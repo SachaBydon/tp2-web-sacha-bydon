@@ -1,6 +1,4 @@
-import { Assignments } from '../components'
-import { Switch, FormControlLabel } from '@mui/material'
-import { useAuthContext } from '../contexts/AuthContext'
+import { Assignments } from '@/components'
 
 export default function Home() {
 

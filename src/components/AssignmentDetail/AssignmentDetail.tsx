@@ -8,7 +8,7 @@ import {
   CardContent,
   CardActions,
 } from '@mui/material'
-import { useAssignmentsContext } from '../../contexts/AssignmentsContext'
+import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 
 type Props = {
   assignmentIndex: number | null

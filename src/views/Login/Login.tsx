@@ -9,8 +9,8 @@ import {
 import LoginIcon from '@mui/icons-material/Login'
 import LoopIcon from '@mui/icons-material/Loop'
 import './LoginStyle.scss'
-import useForm from '../../hooks/useForm'
-import { useAuthContext } from '../../contexts/AuthContext'
+import useForm from '@/hooks/useForm'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 

@@ -4,8 +4,8 @@ import {
   AssignmentDetail,
   AddAssignment,
   AssignmentItem,
-} from '../../components'
-import { useAssignmentsContext } from '../../contexts/AssignmentsContext'
+} from '@/components'
+import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import { List } from '@mui/material'
 
 export default function Assignments() {

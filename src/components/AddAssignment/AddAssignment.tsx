@@ -2,12 +2,13 @@ import { useRef, useState, useEffect } from 'react'
 import { FormGroup, TextField, Fab } from '@mui/material'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import frLocale from 'date-fns/locale/fr'
 import DatePicker from '@mui/lab/DatePicker'
-import { useAssignmentsContext } from '../../contexts/AssignmentsContext'
+import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import './AddAssignmentStyle.scss'
 import AddIcon from '@mui/icons-material/Add'
-import useForm from '../../hooks/useForm'
-import { useAuthContext } from '../../contexts/AuthContext'
+import useForm from '@/hooks/useForm'
+import { useAuthContext } from '@/contexts/AuthContext'
 
 export default function AddAssignment() {
   const { addAssignment: add } = useAssignmentsContext()
@@ -60,7 +61,7 @@ export default function AddAssignment() {
           />
         </FormGroup>
         <FormGroup>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <LocalizationProvider dateAdapter={AdapterDateFns} locale={frLocale}>
             <DatePicker
               label="Date de rendu"
               value={formValues.date}
@@ -84,7 +85,11 @@ export default function AddAssignment() {
         </FormGroup>
       </form>
       <div className={formVisible ? 'hide' : ''}>
-        <Fab color="primary" onClick={() => setFormVisible(true)} disabled={!admin}>
+        <Fab
+          color="primary"
+          onClick={() => setFormVisible(true)}
+          disabled={!admin}
+        >
           <AddIcon />
         </Fab>
       </div>

@@ -1,4 +1,4 @@
-import { useAuthContext } from '../contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { Route, Redirect } from 'react-router-dom'
 
 type Props = {
