@@ -2,7 +2,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 
 type Props = {
   router: any
-  children: React.ReactNode
+  children: any
 }
 
 const isBrowser = () => typeof window !== 'undefined'
