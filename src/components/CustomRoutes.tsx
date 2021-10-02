@@ -1,0 +1,22 @@
+import { useAuthContext } from '@/contexts/AuthContext'
+
+type Props = {
+  router: any
+  children: React.ReactNode
+}
+
+const isBrowser = () => typeof window !== 'undefined'
+
+export default function CustomRoute({ router, children }: Props) {
+  const { loggedIn } = useAuthContext()
+
+  if (isBrowser()) {
+    const authorized = loggedIn || router.pathname === '/login'
+    const uselessLogin = loggedIn && router.pathname === '/login'
+    if (!authorized) router.push('/login')
+    if (uselessLogin) router.push('/')
+    return authorized && !uselessLogin && children
+  } else {
+    return children
+  }
+}

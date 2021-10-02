@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import Assignment from 'types/Assignment'
+import Assignment from '@/types/Assignment'
 import { useState } from 'react'
 
 export type AppContextType = {
@@ -11,9 +11,9 @@ export type AppContextType = {
 
 export const AssignmentsContext = createContext<AppContextType>({
   assignments: [],
-  addAssignment: () => { },
-  setAssignmentRendu: () => { },
-  deleteAssignment: () => { },
+  addAssignment: () => {},
+  setAssignmentRendu: () => {},
+  deleteAssignment: () => {},
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
@@ -46,6 +46,4 @@ export const initAssignmentsContext = () => {
     setAssignmentRendu,
     deleteAssignment,
   }
-
-
 }

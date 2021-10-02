@@ -10,7 +10,7 @@ export type AuthContextType = {
 export const AuthContext = createContext<AuthContextType>({
   loggedIn: false,
   admin: false,
-  login: () => { },
+  login: () => {},
 })
 export const useAuthContext = () => useContext(AuthContext)
 
@@ -21,11 +21,12 @@ export const initAuthContext = () => {
   function login(user: any): Promise<{ valid: boolean }> {
     return new Promise<{ valid: boolean }>((resolve) => {
       setTimeout(() => {
-        if (user.name === 'admin' && user.password === 'admin') {
+        if (user.name === 'admin' && user.password === 'alligator') {
           setLoggedIn(true)
           setAdmin(true)
+          console.log('admin logged in')
           resolve({ valid: true })
-        } else if (user.name === 'user' && user.password === 'user') {
+        } else if (user.name === 'user' && user.password === 'langouste') {
           setLoggedIn(true)
           resolve({ valid: true })
         } else {

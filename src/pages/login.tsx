@@ -8,11 +8,10 @@ import {
 } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
 import LoopIcon from '@mui/icons-material/Loop'
-import './LoginStyle.scss'
 import useForm from '@/hooks/useForm'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import Router from 'next/router'
 
 export default function Login() {
   const defaultForm = { name: '', password: '' }
@@ -20,12 +19,11 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const { login } = useAuthContext()
-  const history = useHistory()
 
   function onFormChange() {
     setError('')
   }
-  
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     console.log(formValues)
@@ -34,7 +32,7 @@ export default function Login() {
     const authResult: any = await login(formValues)
     setLoading(false)
     if (authResult.valid) {
-      history.push('/')
+      // Router.push('/')
     } else {
       setError('Identifiant ou mot de passe incorect')
     }

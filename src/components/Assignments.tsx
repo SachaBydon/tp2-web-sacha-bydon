@@ -1,10 +1,5 @@
-import './AssignmentsStyle.scss'
 import { useState } from 'react'
-import {
-  AssignmentDetail,
-  AddAssignment,
-  AssignmentItem,
-} from '@/components'
+import { AssignmentDetail, AddAssignment, AssignmentItem } from '@/components'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import { List } from '@mui/material'
 

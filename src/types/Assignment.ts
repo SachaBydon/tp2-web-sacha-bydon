@@ -1,7 +1,7 @@
 type Assignment = {
-  nom: string;
-  dateDeRendu: string;
-  rendu?: boolean;
+  nom: string
+  dateDeRendu: string
+  rendu?: boolean
 }
 
-export default Assignment;
+export default Assignment

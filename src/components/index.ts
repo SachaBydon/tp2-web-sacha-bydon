@@ -1,7 +1,13 @@
-import Assignments from './Assignments/Assignments'
-import AssignmentDetail from './AssignmentDetail/AssignmentDetail'
-import AddAssignment from './AddAssignment/AddAssignment'
-import AssignmentItem from './AssignmentItem/AssignmentItem'
-import Route from './Route'
+import Assignments from './Assignments'
+import AssignmentDetail from './AssignmentDetail'
+import AddAssignment from './AddAssignment'
+import AssignmentItem from './AssignmentItem'
+import CustomRoutes from './CustomRoutes'
 
-export { Assignments, AssignmentDetail, AddAssignment, AssignmentItem, Route }
+export {
+  Assignments,
+  AssignmentDetail,
+  AddAssignment,
+  AssignmentItem,
+  CustomRoutes,
+}

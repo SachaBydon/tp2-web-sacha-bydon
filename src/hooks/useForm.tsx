@@ -24,6 +24,6 @@ export default function useForm(initialValues: any, onChange?: () => void) {
     formValues,
     updateForm,
     clearForm,
-    setValue
+    setValue,
   }
 }

@@ -1,4 +1,9 @@
-import './App.scss'
+import { AppProps } from 'next/app'
+import '@/styles/global.css'
+import '@/styles/AddAssignment.scss'
+import '@/styles/Assignments.scss'
+import '@/styles/Login.scss'
+
 import {
   AssignmentsContext,
   initAssignmentsContext,
@@ -6,11 +11,12 @@ import {
 import { AuthContext, initAuthContext } from '@/contexts/AuthContext'
 import { createTheme } from '@mui/material/styles'
 import { ThemeProvider } from '@mui/material'
-import { BrowserRouter as Router, Switch } from 'react-router-dom'
-import { Route } from '@/components'
-import { Home, Login } from '@/views'
+import { CustomRoutes } from '@/components'
 
-function App() {
+
+//TODO: fix login react error
+//TODO: add eslint
+export default function MyApp({ Component, pageProps, router }: AppProps) {
   const assignmentsContext = initAssignmentsContext()
   const authContext = initAuthContext()
   const darkTheme = createTheme({ palette: { mode: 'dark' } })
@@ -19,22 +25,11 @@ function App() {
     <AssignmentsContext.Provider value={assignmentsContext}>
       <AuthContext.Provider value={authContext}>
         <ThemeProvider theme={darkTheme}>
-          <Router>
-            <div className="App">
-              <Switch>
-                <Route path="/login">
-                  <Login />
-                </Route>
-                <Route path="/" isProtected>
-                  <Home />
-                </Route>
-              </Switch>
-            </div>
-          </Router>
+          <CustomRoutes router={router}>
+            <Component {...pageProps} />
+          </CustomRoutes>
         </ThemeProvider>
       </AuthContext.Provider>
     </AssignmentsContext.Provider>
   )
 }
-
-export default App
