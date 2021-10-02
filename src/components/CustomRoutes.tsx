@@ -15,7 +15,8 @@ export default function CustomRoute({ router, children }: Props) {
     const uselessLogin = loggedIn && router.pathname === '/login'
     if (!authorized) router.push('/login')
     if (uselessLogin) router.push('/')
-    return authorized && !uselessLogin && children
+    const doRender = authorized && !uselessLogin
+    return doRender && children
   } else {
     return children
   }
