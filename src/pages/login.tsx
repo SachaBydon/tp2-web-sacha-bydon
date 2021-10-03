@@ -48,11 +48,11 @@ export default function Login() {
     setLoading(true)
 
     const authResult: any = await login(formValues)
-    setLoading(false)
     if (authResult.valid) {
       Router.push('/')
     } else {
       setError('Identifiant ou mot de passe incorect')
+      setLoading(false)
     }
   }
 
