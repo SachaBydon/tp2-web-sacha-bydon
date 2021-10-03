@@ -13,8 +13,6 @@ import { createTheme } from '@mui/material/styles'
 import { ThemeProvider } from '@mui/material'
 import { CustomRoutes } from '@/components'
 
-
-//TODO: fix login react error
 //TODO: add eslint
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   const assignmentsContext = initAssignmentsContext()
@@ -25,9 +23,9 @@ export default function MyApp({ Component, pageProps, router }: AppProps) {
     <AssignmentsContext.Provider value={assignmentsContext}>
       <AuthContext.Provider value={authContext}>
         <ThemeProvider theme={darkTheme}>
-          <CustomRoutes router={router}>
-            <Component {...pageProps} />
-          </CustomRoutes>
+          <Component {...pageProps} />
+          {/* <CustomRoutes router={router}>
+          </CustomRoutes> */}
         </ThemeProvider>
       </AuthContext.Provider>
     </AssignmentsContext.Provider>

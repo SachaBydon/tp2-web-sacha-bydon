@@ -13,8 +13,25 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useState } from 'react'
 import Router from 'next/router'
 
+export async function getServerSideProps(context: any) {
+  const { user_status } = context.req.cookies
+  console.log(user_status)
+  const loggedIn = user_status === 'admin' || user_status === 'user'
+
+  if (loggedIn) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return { props: {} }
+}
+
 export default function Login() {
-  const defaultForm = { name: '', password: '' }
+  const defaultForm = { username: '', password: '' }
   const { formValues, updateForm } = useForm(defaultForm, onFormChange)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -32,7 +49,7 @@ export default function Login() {
     const authResult: any = await login(formValues)
     setLoading(false)
     if (authResult.valid) {
-      // Router.push('/')
+      Router.push('/')
     } else {
       setError('Identifiant ou mot de passe incorect')
     }
@@ -44,10 +61,10 @@ export default function Login() {
       <form onSubmit={onSubmit}>
         <FormGroup>
           <TextField
-            name="name"
+            name="username"
             label="Nom"
             size="small"
-            value={formValues.name}
+            value={formValues.username}
             onChange={updateForm}
             autoFocus
           />
@@ -69,7 +86,9 @@ export default function Login() {
             color="primary"
             type="submit"
             disabled={
-              !formValues.name.length || !formValues.password.length || loading
+              !formValues.username.length ||
+              !formValues.password.length ||
+              loading
             }
             variant="extended"
           >
