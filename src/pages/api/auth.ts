@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import Login from '../login'
 
 interface ICredentials {
   username: string
@@ -45,6 +46,20 @@ export default function handler(
   else if (provided_creds.equals(ADMIN_CREDS)) user_status = { value: 'admin' }
   else user_status = { value: 'not_logged' }
 
+  console.log(provided_creds);
+
   console.log(user_status)
   res.status(200).json({ user_status })
+}
+
+
+
+export function login(user: ICredentials) {
+  console.log('function login /api/auth.ts')
+  
+  const creds = new Credentials(user)
+  return {
+    logged: (creds.equals(USER_CREDS) || creds.equals(ADMIN_CREDS)),
+    admin: creds.equals(ADMIN_CREDS)
+  }
 }

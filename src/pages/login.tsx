@@ -12,13 +12,14 @@ import useForm from '@/hooks/useForm'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useState } from 'react'
 import Router from 'next/router'
+import { login } from '@/pages/api/auth'
 
 export async function getServerSideProps(context: any) {
-  const { user_status } = context.req.cookies
-  console.log(user_status)
-  const loggedIn = user_status === 'admin' || user_status === 'user'
+  let { user } = context.req.cookies
+  user = user ? JSON.parse(user) : undefined
+  const res: any = user === undefined ? { logged: false } : login(user)
 
-  if (loggedIn) {
+  if (res.logged) {
     return {
       redirect: {
         destination: '/',

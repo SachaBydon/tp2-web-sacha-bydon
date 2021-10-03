@@ -7,12 +7,14 @@ export type AuthContextType = {
   loggedIn: boolean
   admin: boolean
   login: (user: any) => void
+  setAdmin: (admin: boolean) => void
 }
 
 export const AuthContext = createContext<AuthContextType>({
   loggedIn: false,
   admin: false,
   login: () => { },
+  setAdmin: () => { }
 })
 export const useAuthContext = () => useContext(AuthContext)
 
@@ -30,7 +32,7 @@ export const initAuthContext = () => {
         if (res.status === 200) {
           const data = await res.json()
           const { value: user_status } = data.user_status
-          setCookie(null, 'user_status', user_status, { maxAge: 30 * 24 * 60 * 60, })
+          setCookie(null, 'user', JSON.stringify(user), { maxAge: 30 * 24 * 60 * 60, })
           if (user_status === 'admin' || user_status === 'user') {
             setLoggedIn(true)
             setAdmin(user_status === 'admin')
@@ -47,5 +49,5 @@ export const initAuthContext = () => {
     })
   }
 
-  return { loggedIn, login, admin }
+  return { loggedIn, login, admin, setAdmin }
 }

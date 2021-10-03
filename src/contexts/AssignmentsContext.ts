@@ -5,24 +5,22 @@ import { useState } from 'react'
 export type AppContextType = {
   assignments: Assignment[]
   addAssignment: (assignment: Assignment) => void
+  setAssignments: (new_assignments: Assignment[]) => void
   setAssignmentRendu: (i: number | null) => void
   deleteAssignment: (i: number) => void
 }
 
 export const AssignmentsContext = createContext<AppContextType>({
   assignments: [],
-  addAssignment: () => {},
-  setAssignmentRendu: () => {},
-  deleteAssignment: () => {},
+  addAssignment: () => { },
+  setAssignments: () => { },
+  setAssignmentRendu: () => { },
+  deleteAssignment: () => { },
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
 export const initAssignmentsContext = () => {
-  const [assignments, setAssignments] = useState<Assignment[]>([
-    { nom: 'TP1', dateDeRendu: '17/11/2020', rendu: true },
-    { nom: 'TP2', dateDeRendu: '15/12/2020', rendu: false },
-    { nom: 'TP3', dateDeRendu: '01/04/2020', rendu: false },
-  ])
+  const [assignments, setAssignments] = useState<Assignment[]>([])
 
   function addAssignment(assignment: Assignment) {
     setAssignments([...assignments, assignment])
@@ -43,6 +41,7 @@ export const initAssignmentsContext = () => {
   return {
     assignments,
     addAssignment,
+    setAssignments,
     setAssignmentRendu,
     deleteAssignment,
   }
