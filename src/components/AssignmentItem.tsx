@@ -44,7 +44,7 @@ export default function AssignmentItem({
 
   return (
     <ListItem
-      className={loading ? 'loading' : ''}
+      className={loading  ? 'loading' : ''}
       secondaryAction={
         <div className="actions">
           <IconButton
