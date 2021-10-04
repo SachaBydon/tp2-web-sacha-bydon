@@ -6,7 +6,6 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 export async function getAllAssignments() {
   return new Promise<Assignment[]>(async (resolve) => {
     console.log('connecting ...')
-
     await dbConnect()
     console.log('connected')
     const result = await Assignments.find({})
@@ -24,6 +23,11 @@ export async function getAllAssignments() {
 }
 
 async function addAssignment(req: NextApiRequest, res: NextApiResponse) {
+
+  console.log('connecting ...')
+  await dbConnect()
+  console.log('connected')
+  
   const newAssignment = new Assignments(req.body as Assignment)
   let data: Assignment
   try {
