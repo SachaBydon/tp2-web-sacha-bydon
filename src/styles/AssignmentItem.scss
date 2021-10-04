@@ -1,5 +1,6 @@
 .loading {
   opacity: 0.5;
+  pointer-events: none;
   .loader {
     display: block;
   }
