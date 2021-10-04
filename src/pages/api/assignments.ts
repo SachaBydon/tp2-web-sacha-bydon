@@ -23,65 +23,55 @@ export async function getAllAssignments() {
   })
 }
 
-function addAssignment(req: NextApiRequest, res: NextApiResponse) {
+async function addAssignment(req: NextApiRequest, res: NextApiResponse) {
   const newAssignment = new Assignments(req.body as Assignment)
-  newAssignment
-    .save()
-    .then((data: Assignment) => {
-      return res.status(200).json({
-        message: 'Assignment created',
-        data: data
-      })
-    })
-    .catch((err: any) => {
-      return res.status(500).json({
-        message: 'Error creating assignment',
-        error: err,
-      })
-    })
+  let data: Assignment
+  try {
+    data = await newAssignment.save()
+    return res.status(200).json({ message: 'Assignment created', data: data })
+  } catch (error) {
+    return res.status(500).json({ message: 'Error creating assignment', error })
+  }
 }
 
-function updateAssignment(req: NextApiRequest, res: NextApiResponse) {
+async function updateAssignment(req: NextApiRequest, res: NextApiResponse) {
   const updateAssignment = new Assignments(req.body as Assignment)
-  Assignments.findByIdAndUpdate(
-    updateAssignment._id,
-    updateAssignment,
-    { new: true },
-    (err: any) => {
-      if (err) {
-        res.status(500).json({
-          message: 'Error updating assignment',
-          error: err,
-        })
-      } else {
-        res.status(200).json({
-          message: 'Assignment updated',
-        })
-      }
-    }
-  )
+  let data: Assignment
+
+  try {
+    data = await Assignments.findByIdAndUpdate(updateAssignment._id, updateAssignment, { new: true })
+    res.status(200).json({
+      message: 'Assignment updated',
+      data
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error updating assignment',
+      error
+    })
+  }
 }
 
-function deleteAssignment(req: NextApiRequest, res: NextApiResponse) {
-  Assignments.findByIdAndDelete(req.query.id, (err: any) => {
-    if (err) {
-      res.status(500).json({
-        message: 'Error deleting assignment',
-        error: err,
-      })
-    } else {
-      res.status(200).json({
-        message: 'Assignment deleted',
-      })
-    }
-  })
+async function deleteAssignment(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    await Assignments.findByIdAndDelete(req.query.id)
+    res.status(200).json({
+      message: 'Assignment deleted',
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error deleting assignment',
+      error
+    })
+  }
+
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
-    case 'POST': addAssignment(req, res); break
-    case 'PUT': updateAssignment(req, res); break
-    case 'DELETE': deleteAssignment(req, res); break
+    case 'POST': await addAssignment(req, res); break
+    case 'PUT': await updateAssignment(req, res); break
+    case 'DELETE': await deleteAssignment(req, res); break
     default: res.status(405).json({ message: 'Method not allowed' })
   }
 }

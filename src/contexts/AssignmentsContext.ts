@@ -12,10 +12,10 @@ export type AppContextType = {
 
 export const AssignmentsContext = createContext<AppContextType>({
   assignments: [],
-  addAssignment: () => {},
-  setAssignments: () => {},
-  setAssignmentRendu: () => {},
-  deleteAssignment: () => {},
+  addAssignment: () => { },
+  setAssignments: () => { },
+  setAssignmentRendu: () => { },
+  deleteAssignment: () => { },
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
@@ -33,8 +33,9 @@ export const initAssignmentsContext = () => {
       })
         .then((res) => {
           if (res.status === 200) {
-            res.json().then((data) => {
-              setAssignments((prev) => [...prev, data])
+            res.json().then((payload) => {
+              console.log(payload.data)
+              setAssignments((prev) => [...prev, payload.data])
               resolve(null)
             })
           } else {
