@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import Login from '../login'
 
 interface ICredentials {
   username: string

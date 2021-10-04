@@ -1,12 +1,12 @@
 import {
   Button,
-  Checkbox,
   Modal,
   Typography,
   FormControlLabel,
   Card,
   CardContent,
   CardActions,
+  Switch,
 } from '@mui/material'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 
@@ -25,8 +25,12 @@ export default function AssignmentDetail({
   const assignment =
     assignmentIndex !== null ? assignments[assignmentIndex] : null
 
-  function renduChanged(event: any) {
-    if (event.target.checked) setAssignmentRendu(assignmentIndex)
+  async function renduChanged(event: any) {
+    if (event.target.checked) {
+      console.log('loading ...')
+      await setAssignmentRendu(assignmentIndex)
+      console.log('rendu !!!')
+    }
   }
 
   return (
@@ -51,16 +55,14 @@ export default function AssignmentDetail({
             {assignment?.rendu ? (
               <>Ce devoir a été rendu le {assignment?.dateDeRendu}.</>
             ) : (
-              <>
-                La date de rendu de ce devoir est fixé au{' '}
-                {assignment?.dateDeRendu}.
-                <FormControlLabel
-                  style={{ display: 'block' }}
-                  control={<Checkbox onChange={renduChanged} />}
-                  label="Rendu"
-                />
-              </>
+              <>Ce devoir a été rendu le {assignment?.dateDeRendu}.</>
             )}
+            <FormControlLabel
+              disabled={assignment?.rendu}
+              style={{ display: 'block' }}
+              control={<Switch onChange={renduChanged} checked={assignment?.rendu} />}
+              label="Rendu"
+            />
           </Typography>
         </CardContent>
         <CardActions>

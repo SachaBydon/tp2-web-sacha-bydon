@@ -29,6 +29,14 @@ export default function AssignmentItem({
   const { deleteAssignment } = useAssignmentsContext()
   const { admin } = useAuthContext()
 
+  async function remove() {
+    if(assignment._id) {
+      console.log('loading ...')
+      deleteAssignment(assignment._id)
+      console.log('deleted !!!')
+    }
+  }
+
   return (
     <ListItem
       key={index}
@@ -45,7 +53,7 @@ export default function AssignmentItem({
           <IconButton
             edge="end"
             aria-label="delete"
-            onClick={() => deleteAssignment(index)}
+            onClick={() => remove()}
             disabled={!admin}
           >
             <DeleteIcon />

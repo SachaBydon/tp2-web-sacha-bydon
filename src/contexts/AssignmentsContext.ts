@@ -7,15 +7,15 @@ export type AppContextType = {
   addAssignment: (assignment: Assignment) => void
   setAssignments: (new_assignments: Assignment[]) => void
   setAssignmentRendu: (i: number | null) => void
-  deleteAssignment: (i: number) => void
+  deleteAssignment: (id: string) => void
 }
 
 export const AssignmentsContext = createContext<AppContextType>({
   assignments: [],
-  addAssignment: () => { },
-  setAssignments: () => { },
-  setAssignmentRendu: () => { },
-  deleteAssignment: () => { },
+  addAssignment: () => {},
+  setAssignments: () => {},
+  setAssignmentRendu: () => {},
+  deleteAssignment: () => {},
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
@@ -23,19 +23,77 @@ export const initAssignmentsContext = () => {
   const [assignments, setAssignments] = useState<Assignment[]>([])
 
   function addAssignment(assignment: Assignment) {
-    setAssignments([...assignments, assignment])
+    return new Promise((resolve) => {
+      fetch('/api/assignments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(assignment),
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            res.json().then((data) => {
+              setAssignments((prev) => [...prev, data])
+              resolve(null)
+            })
+          } else {
+            res.json().then((data) => {
+              console.error(data.message)
+              resolve(null)
+            })
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          resolve(null)
+        })
+    })
   }
   function setAssignmentRendu(i: number | null) {
-    if (i !== null) {
-      const newAssignments = [...assignments]
-      newAssignments[i].rendu = true
-      setAssignments(newAssignments)
-    }
+    return new Promise((resolve) => {
+      if (i !== null) {
+        const newAssignments = [...assignments]
+        newAssignments[i].rendu = true
+        fetch('/api/assignments', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newAssignments[i]),
+        })
+          .then(() => {
+            setAssignments(newAssignments)
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+          .finally(() => {
+            resolve(null)
+          })
+      } else {
+        resolve(null)
+      }
+    })
   }
-  function deleteAssignment(i: number) {
-    const newAssignments = [...assignments]
-    newAssignments.splice(i, 1)
-    setAssignments(newAssignments)
+  function deleteAssignment(id: string) {
+    return new Promise((resolve) => {
+      fetch('/api/assignments?id=' + id, {
+        method: 'DELETE',
+      })
+        .then(() => {
+          const newAssignments = assignments.filter(
+            (assignment) => assignment._id !== id
+          )
+          setAssignments(newAssignments)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+        .finally(() => {
+          resolve(null)
+        })
+    })
   }
 
   return {

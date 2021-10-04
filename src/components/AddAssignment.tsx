@@ -8,6 +8,7 @@ import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import AddIcon from '@mui/icons-material/Add'
 import useForm from '@/hooks/useForm'
 import { useAuthContext } from '@/contexts/AuthContext'
+import Assignment from '@/types/Assignment'
 
 export default function AddAssignment() {
   const { addAssignment: add } = useAssignmentsContext()
@@ -21,12 +22,15 @@ export default function AddAssignment() {
 
   const [formVisible, setFormVisible] = useState(false)
 
-  function onSubmit(e: any) {
+  async function onSubmit(e: any) {
     e.preventDefault()
-    add({
+    console.log('loading ...')
+    await add({
       nom: formValues.name,
       dateDeRendu: formValues.date?.toLocaleDateString() ?? '',
-    })
+      rendu: false,
+    } as Assignment)
+    console.log('added !!!')
     clearForm()
     setFormVisible(false)
   }

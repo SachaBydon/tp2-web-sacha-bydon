@@ -14,6 +14,7 @@ import { ThemeProvider } from '@mui/material'
 import { CustomRoutes } from '@/components'
 
 //TODO: add eslint
+//TODO: fix bug with backend results
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   const assignmentsContext = initAssignmentsContext()
   const authContext = initAuthContext()
