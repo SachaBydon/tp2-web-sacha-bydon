@@ -3,6 +3,7 @@ import '@/styles/global.css'
 import '@/styles/AddAssignment.scss'
 import '@/styles/Assignments.scss'
 import '@/styles/Login.scss'
+import '@/styles/AssignmentItem.scss'
 
 import {
   AssignmentsContext,

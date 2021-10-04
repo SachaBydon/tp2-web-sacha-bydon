@@ -35,6 +35,7 @@ export const initAssignmentsContext = () => {
           if (res.status === 200) {
             res.json().then((payload) => {
               console.log(payload.data)
+              payload.data.rendu = payload.data.rendu === 'true' ? true : false
               setAssignments((prev) => [...prev, payload.data])
               resolve(null)
             })
@@ -51,17 +52,17 @@ export const initAssignmentsContext = () => {
         })
     })
   }
-  function setAssignmentRendu(i: number | null) {
+  function setAssignmentRendu(id: number | null) {
     return new Promise((resolve) => {
-      if (i !== null) {
+      if (id !== null) {
         const newAssignments = [...assignments]
-        newAssignments[i].rendu = true
+        newAssignments[id].rendu = true
         fetch('/api/assignments', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(newAssignments[i]),
+          body: JSON.stringify(newAssignments[id]),
         })
           .then(() => {
             setAssignments(newAssignments)

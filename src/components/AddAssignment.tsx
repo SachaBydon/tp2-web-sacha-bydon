@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add'
 import useForm from '@/hooks/useForm'
 import { useAuthContext } from '@/contexts/AuthContext'
 import Assignment from '@/types/Assignment'
+import { LoadingFabButton } from '@/components'
 
 export default function AddAssignment() {
   const { addAssignment: add } = useAssignmentsContext()
@@ -21,16 +22,19 @@ export default function AddAssignment() {
   const { admin } = useAuthContext()
 
   const [formVisible, setFormVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   async function onSubmit(e: any) {
     e.preventDefault()
     console.log('loading ...')
+    setLoading(true)
     await add({
       nom: formValues.name,
       dateDeRendu: formValues.date?.toLocaleDateString() ?? '',
       rendu: false,
     } as Assignment)
     console.log('added !!!')
+    setLoading(false)
     clearForm()
     setFormVisible(false)
   }
@@ -75,16 +79,13 @@ export default function AddAssignment() {
           </LocalizationProvider>
         </FormGroup>
         <FormGroup>
-          <Fab
-            color="primary"
-            onClick={() => setFormVisible(true)}
-            type="submit"
+          <LoadingFabButton
+            text="Ajouter un devoir"
+            loadingText="Ajout du devoir ..."
             disabled={!formValues.name.length || formValues.date === null}
-            variant="extended"
-          >
-            <AddIcon />
-            Ajouter un devoir
-          </Fab>
+            loading={loading}
+            icon={<AddIcon />}
+          />
         </FormGroup>
       </form>
       <div className={formVisible ? 'hide' : ''}>

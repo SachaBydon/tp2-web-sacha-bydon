@@ -3,6 +3,7 @@ import AssignmentDetail from './AssignmentDetail'
 import AddAssignment from './AddAssignment'
 import AssignmentItem from './AssignmentItem'
 import CustomRoutes from './CustomRoutes'
+import LoadingFabButton from './LoadingFabButton'
 
 export {
   Assignments,
@@ -10,4 +11,5 @@ export {
   AddAssignment,
   AssignmentItem,
   CustomRoutes,
+  LoadingFabButton
 }

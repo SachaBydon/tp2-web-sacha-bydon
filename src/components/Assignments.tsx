@@ -23,7 +23,7 @@ export default function Assignments() {
           <AssignmentItem
             assignment={assignment}
             index={index}
-            key={index}
+            key={assignment._id}
             changeSelected={changeSelected}
           />
         ))}

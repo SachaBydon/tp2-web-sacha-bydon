@@ -13,7 +13,9 @@ import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import LoopIcon from '@mui/icons-material/Loop'
 import { green, red } from '@mui/material/colors'
+import { useState } from 'react'
 
 type Props = {
   assignment: Assignment
@@ -28,18 +30,21 @@ export default function AssignmentItem({
 }: Props) {
   const { deleteAssignment } = useAssignmentsContext()
   const { admin } = useAuthContext()
+  const [loading, setLoading] = useState(false)
 
   async function remove() {
-    if(assignment._id) {
+    if (assignment._id) {
       console.log('loading ...')
-      deleteAssignment(assignment._id)
+      setLoading(true)
+      await deleteAssignment(assignment._id)
+      setLoading(false)
       console.log('deleted !!!')
     }
   }
 
   return (
     <ListItem
-      key={index}
+      className={loading ? 'loading' : ''}
       secondaryAction={
         <div className="actions">
           <IconButton
@@ -61,6 +66,9 @@ export default function AssignmentItem({
         </div>
       }
     >
+      <div className="loader">
+        <LoopIcon />
+      </div>
       <ListItemAvatar>
         {assignment.rendu ? (
           <Tooltip title="Rendu" placement="left" arrow>

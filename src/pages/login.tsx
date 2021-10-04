@@ -7,7 +7,7 @@ import {
   FormControl,
 } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
-import LoopIcon from '@mui/icons-material/Loop'
+import { LoadingFabButton } from '@/components'
 import useForm from '@/hooks/useForm'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useState } from 'react'
@@ -83,28 +83,15 @@ export default function Login() {
 
         <FormControl error={error !== null}>
           <FormHelperText id="component-error-text">{error}</FormHelperText>
-          <Fab
-            color="primary"
-            type="submit"
+          <LoadingFabButton
+            text="Se connecter"
+            loadingText="Connexion ..."
             disabled={
-              !formValues.username.length ||
-              !formValues.password.length ||
-              loading
+              !formValues.username.length || !formValues.password.length
             }
-            variant="extended"
-          >
-            {loading ? (
-              <>
-                <LoopIcon className="rotate-animation" />
-                Connexion ...
-              </>
-            ) : (
-              <>
-                <LoginIcon />
-                Se connecter
-              </>
-            )}
-          </Fab>
+            loading={loading}
+            icon={<LoginIcon />}
+          />
         </FormControl>
       </form>
     </Paper>
