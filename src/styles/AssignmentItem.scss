@@ -1,5 +1,5 @@
 .loading {
-  opacity: 0.5;
+  filter: contrast(.5);
   pointer-events: none;
   .loader {
     display: block;

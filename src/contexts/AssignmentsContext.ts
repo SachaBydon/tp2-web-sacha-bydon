@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react'
 import Assignment from '@/types/Assignment'
 import { useState } from 'react'
+import { SnackbarContextType, useSnackbar } from './SnackbarContext'
 
 export type AppContextType = {
   assignments: Assignment[]
@@ -12,15 +13,16 @@ export type AppContextType = {
 
 export const AssignmentsContext = createContext<AppContextType>({
   assignments: [],
-  addAssignment: () => { },
-  setAssignments: () => { },
-  setAssignmentRendu: () => { },
-  deleteAssignment: () => { },
+  addAssignment: () => {},
+  setAssignments: () => {},
+  setAssignmentRendu: () => {},
+  deleteAssignment: () => {},
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
-export const initAssignmentsContext = () => {
+export const initAssignmentsContext = (snackbarContext: SnackbarContextType) => {
   const [assignments, setAssignments] = useState<Assignment[]>([])
+  const { push } = snackbarContext
 
   function addAssignment(assignment: Assignment) {
     return new Promise((resolve) => {
@@ -37,17 +39,20 @@ export const initAssignmentsContext = () => {
               console.log(payload.data)
               payload.data.rendu = payload.data.rendu === 'true' ? true : false
               setAssignments((prev) => [...prev, payload.data])
+              push(`Assignment ${payload.data.nom} ajouté !`, 'success')
               resolve(null)
             })
           } else {
             res.json().then((data) => {
               console.error(data.message)
+              push(`Erreur: ${data.message}`, 'error')
               resolve(null)
             })
           }
         })
         .catch((err) => {
           console.error(err)
+          push(`Erreur: ${err}`, 'error')
           resolve(null)
         })
     })
@@ -66,11 +71,12 @@ export const initAssignmentsContext = () => {
         })
           .then(() => {
             setAssignments(newAssignments)
+            push(`Assignment ${newAssignments[id].nom} rendu !`, 'success')
+            resolve(null)
           })
           .catch((err) => {
             console.error(err)
-          })
-          .finally(() => {
+            push(`Erreur: ${err}`, 'error')
             resolve(null)
           })
       } else {
@@ -88,11 +94,12 @@ export const initAssignmentsContext = () => {
             (assignment) => assignment._id !== id
           )
           setAssignments(newAssignments)
+          push(`Assignment ${id} supprimé !`, 'success')
+          resolve(null)
         })
         .catch((err) => {
           console.error(err)
-        })
-        .finally(() => {
+          push(`Erreur: ${err}`, 'error')
           resolve(null)
         })
     })

@@ -26,6 +26,11 @@ body {
   scrollbar-color: hsl(210, 100%, 30%) hsl(210, 100%, 20%);
 }
 
+.MuiAlert-standard {
+  background-color: var(--background);
+  box-shadow: 0 0 10px hsl(210, 100%, 20%);
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
