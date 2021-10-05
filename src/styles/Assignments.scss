@@ -4,12 +4,18 @@
   max-width: var(--bp);
 
   .list {
-    max-height: calc(100vh - 230px);
+    max-height: calc(100vh - 245px);
     overflow-y: auto;
 
     .actions {
       display: flex;
       gap: 12px;
     }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
   }
 }

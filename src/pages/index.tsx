@@ -3,7 +3,7 @@ import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { login } from '@/pages/api/auth'
 // import { assignments } from '@/pages/api/assignments'
-import { getAllAssignments } from '@/pages/api/assignments'
+import { getAllAssignments, addALotOffAssignments } from '@/pages/api/assignments'
 import { useEffect } from 'react'
 import Assignment from '@/types/Assignment'
 

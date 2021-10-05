@@ -1,36 +1,66 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AssignmentDetail, AddAssignment, AssignmentItem } from '@/components'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
-import { List } from '@mui/material'
+import { List, Pagination } from '@mui/material'
+
+const ITEMS_PER_PAGE = 10
 
 export default function Assignments() {
   const titre: string = 'Mon application sur les assignments'
 
   const { assignments } = useAssignmentsContext()
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
   const [openModale, setOpenModale] = useState<boolean>(false)
+  const nbPages = Math.ceil(assignments.length / ITEMS_PER_PAGE)
 
-  function changeSelected(index: number) {
-    setSelectedIndex(index)
-    setOpenModale(true)
+  const [filteredAssignments, setFilteredAssignments] = useState(
+    assignments.slice(0, ITEMS_PER_PAGE)
+  )
+  const [page, setPage] = useState(1)
+
+  useEffect(() => {
+    const newAssignments = assignments.slice(
+      (page - 1) * ITEMS_PER_PAGE,
+      page * ITEMS_PER_PAGE
+    )
+    setFilteredAssignments(newAssignments)
+  }, [assignments, page])
+
+  useEffect(() => {
+    
+    console.log(selectedId)
+  }, [selectedId])
+
+  function changeSelected(id: string | undefined) {
+    if (id) {
+      setSelectedId(id)
+      setOpenModale(true)
+    }
+  }
+
+  function pageChanged(e: any, page: number) {
+    if (page !== null) setPage(page)
   }
 
   return (
     <div className="Assignments">
       <h1>{titre}</h1>
       <List className="list">
-        {assignments.map((assignment, index) => (
+        {filteredAssignments.map((assignment, index) => (
           <AssignmentItem
+            key={index}
             assignment={assignment}
-            index={index}
-            key={assignment._id}
             changeSelected={changeSelected}
           />
         ))}
       </List>
+      <div className="pagination">
+        <Pagination count={nbPages} onChange={pageChanged} />
+      </div>
+
       <AddAssignment />
       <AssignmentDetail
-        assignmentIndex={selectedIndex}
+        assignmentId={selectedId}
         open={openModale}
         setModal={setOpenModale}
       />

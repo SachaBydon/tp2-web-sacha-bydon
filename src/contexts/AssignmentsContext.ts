@@ -7,7 +7,7 @@ export type AppContextType = {
   assignments: Assignment[]
   addAssignment: (assignment: Assignment) => void
   setAssignments: (new_assignments: Assignment[]) => void
-  setAssignmentRendu: (i: number | null) => void
+  setAssignmentRendu: (i: string | null) => void
   deleteAssignment: (id: string) => void
 }
 
@@ -57,21 +57,22 @@ export const initAssignmentsContext = (snackbarContext: SnackbarContextType) => 
         })
     })
   }
-  function setAssignmentRendu(id: number | null) {
+  function setAssignmentRendu(id: string | null) {
     return new Promise((resolve) => {
       if (id !== null) {
         const newAssignments = [...assignments]
-        newAssignments[id].rendu = true
+        const index = newAssignments.findIndex((assignment) => assignment._id === id)
+        newAssignments[index].rendu = true
         fetch('/api/assignments', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(newAssignments[id]),
+          body: JSON.stringify(newAssignments[index]),
         })
           .then(() => {
             setAssignments(newAssignments)
-            push(`Assignment ${newAssignments[id].nom} rendu !`, 'success')
+            push(`Assignment ${newAssignments[index].nom} rendu !`, 'success')
             resolve(null)
           })
           .catch((err) => {

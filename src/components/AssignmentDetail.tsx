@@ -14,26 +14,29 @@ import LoopIcon from '@mui/icons-material/Loop'
 import { useSnackbar } from '@/contexts/SnackbarContext'
 
 type Props = {
-  assignmentIndex: number | null
+  assignmentId: string | null
   open: boolean
   setModal: (open: boolean) => void
 }
 
 export default function AssignmentDetail({
-  assignmentIndex,
+  assignmentId,
   open,
   setModal,
 }: Props) {
   const { assignments, setAssignmentRendu } = useAssignmentsContext()
   const assignment =
-    assignmentIndex !== null ? assignments[assignmentIndex] : null
+    assignmentId !== null
+      ? assignments.find((a) => a._id === assignmentId)
+      : null
+
   const [loading, setLoading] = useState(false)
 
   async function renduChanged(event: any) {
     if (event.target.checked) {
       console.log('loading ...')
       setLoading(true)
-      await setAssignmentRendu(assignmentIndex)
+      await setAssignmentRendu(assignmentId)
       console.log('rendu !!!')
       setLoading(false)
     }

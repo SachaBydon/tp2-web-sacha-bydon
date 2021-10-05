@@ -19,13 +19,11 @@ import { useState } from 'react'
 
 type Props = {
   assignment: Assignment
-  index: number
-  changeSelected: (i: number) => void
+  changeSelected: (i: string | undefined) => void
 }
 
 export default function AssignmentItem({
   assignment,
-  index,
   changeSelected,
 }: Props) {
   const { deleteAssignment } = useAssignmentsContext()
@@ -50,7 +48,7 @@ export default function AssignmentItem({
           <IconButton
             edge="end"
             aria-label="edit"
-            onClick={() => changeSelected(index)}
+            onClick={() => changeSelected(assignment._id)}
             disabled={!admin}
           >
             <EditIcon />
