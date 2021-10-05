@@ -35,6 +35,10 @@ export default function MyApp({ Component, pageProps, router }: AppProps) {
               open={snackbarContext.snackbar.open}
               autoHideDuration={30000}
               onClose={snackbarContext.handleClose}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
             >
               <Alert
                 severity={snackbarContext.snackbar.severity as any}

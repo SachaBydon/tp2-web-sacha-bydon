@@ -23,10 +23,6 @@ export async function getAllAssignments() {
 }
 
 async function addAssignment(req: NextApiRequest, res: NextApiResponse) {
-  console.log('connecting ...')
-  await dbConnect()
-  console.log('connected')
-
   const newAssignment = new Assignments(req.body as Assignment)
   let data: Assignment
   try {
@@ -77,6 +73,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log('connecting ...')
+  await dbConnect()
+  console.log('connected')
+
   switch (req.method) {
     case 'POST':
       await addAssignment(req, res)
