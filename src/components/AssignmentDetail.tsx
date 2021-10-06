@@ -11,7 +11,7 @@ import {
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import { useState } from 'react'
 import LoopIcon from '@mui/icons-material/Loop'
-import { useSnackbar } from '@/contexts/SnackbarContext'
+import { useRouter } from 'next/router'
 
 type Props = {
   assignmentId: string | null
@@ -24,6 +24,7 @@ export default function AssignmentDetail({
   open,
   setModal,
 }: Props) {
+  const router = useRouter()
   const { assignments, setAssignmentRendu } = useAssignmentsContext()
   const assignment =
     assignmentId !== null
@@ -43,7 +44,13 @@ export default function AssignmentDetail({
   }
 
   return (
-    <Modal open={open} onClose={() => setModal(false)}>
+    <Modal
+      open={open}
+      onClose={() => {
+        setModal(false)
+        router.replace('/')
+      }}
+    >
       <Card
         className={loading ? 'loading' : ''}
         sx={{

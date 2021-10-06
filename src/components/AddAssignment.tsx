@@ -56,7 +56,7 @@ export default function AddAssignment() {
   }, [])
 
   return (
-    <div id="AddAssignment">
+    <div id="AddAssignment" className={formVisible ? 'add-open' : ''}>
       <form onSubmit={onSubmit} className={formVisible ? '' : 'hide'}>
         <FormGroup>
           <TextField

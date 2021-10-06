@@ -5,9 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 export async function getAllAssignments() {
   return new Promise<Assignment[]>(async (resolve) => {
-    console.log('connecting ...')
     await dbConnect()
-    console.log('connected')
     const result = await Assignments.find({})
     resolve(
       result.map((assignment) => {
@@ -72,7 +70,7 @@ async function deleteAssignment(req: NextApiRequest, res: NextApiResponse) {
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
-) {
+) {  
   console.log('connecting ...')
   await dbConnect()
   console.log('connected')
