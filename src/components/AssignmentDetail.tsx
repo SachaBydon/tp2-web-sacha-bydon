@@ -48,7 +48,7 @@ export default function AssignmentDetail({
       open={open}
       onClose={() => {
         setModal(false)
-        router.replace('/')
+        window.history.pushState({ path: '/' }, '', '/')
       }}
     >
       <Card

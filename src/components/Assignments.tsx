@@ -37,7 +37,7 @@ export default function Assignments() {
     if (id) {
       setSelectedId(id)
       setOpenModale(true)
-      router.replace('/?id='+id)
+      window.history.pushState({ path: '/?id='+id }, '', '/?id='+id)
     }
   }
 
