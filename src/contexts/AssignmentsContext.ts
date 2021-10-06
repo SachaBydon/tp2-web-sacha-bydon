@@ -1,10 +1,12 @@
 import { createContext, useContext } from 'react'
 import Assignment from '@/types/Assignment'
-import { useState } from 'react'
-import { SnackbarContextType, useSnackbar } from './SnackbarContext'
+import Filter from '@/types/Filter'
+import { useState, useEffect } from 'react'
+import { SnackbarContextType } from './SnackbarContext'
 
 export type AppContextType = {
   assignments: Assignment[]
+  filters: Filter[]
   addAssignment: (assignment: Assignment) => void
   setAssignments: (new_assignments: Assignment[]) => void
   setAssignmentRendu: (i: string | null) => void
@@ -13,6 +15,7 @@ export type AppContextType = {
 
 export const AssignmentsContext = createContext<AppContextType>({
   assignments: [],
+  filters: [],
   addAssignment: () => {},
   setAssignments: () => {},
   setAssignmentRendu: () => {},
@@ -20,8 +23,11 @@ export const AssignmentsContext = createContext<AppContextType>({
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
-export const initAssignmentsContext = (snackbarContext: SnackbarContextType) => {
+export const initAssignmentsContext = (
+  snackbarContext: SnackbarContextType
+) => {
   const [assignments, setAssignments] = useState<Assignment[]>([])
+  const [filters, setFilters] = useState<Filter[]>([])
   const { push } = snackbarContext
 
   function addAssignment(assignment: Assignment) {
@@ -61,7 +67,9 @@ export const initAssignmentsContext = (snackbarContext: SnackbarContextType) => 
     return new Promise((resolve) => {
       if (id !== null) {
         const newAssignments = [...assignments]
-        const index = newAssignments.findIndex((assignment) => assignment._id === id)
+        const index = newAssignments.findIndex(
+          (assignment) => assignment._id === id
+        )
         newAssignments[index].rendu = true
         fetch('/api/assignments', {
           method: 'PUT',
@@ -106,8 +114,28 @@ export const initAssignmentsContext = (snackbarContext: SnackbarContextType) => 
     })
   }
 
+  // useEffect(() => {
+  //   const queries = generateQueries()
+  //   fetch('/api/assignments'+queries, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((payload) => {
+  //       setAssignments(payload.data)
+  //     })
+  //     .catch((err) => {
+  //       console.error(err)
+  //       push(`Erreur: ${err}`, 'error')
+  //       resolve(null)
+  //     })
+  // }, [filters])
+
   return {
     assignments,
+    filters,
+    setFilters,
     addAssignment,
     setAssignments,
     setAssignmentRendu,
