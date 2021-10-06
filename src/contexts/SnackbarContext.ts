@@ -29,7 +29,6 @@ export const initSnackbarContext = () => {
   const [snackbar, setSnackbar] = useState(defaultOptions)
 
   function push(message: string, severity?: 'success' | 'error' | 'warning') {
-    console.log('oush')
     setSnackbar({
       open: true,
       message: message,
