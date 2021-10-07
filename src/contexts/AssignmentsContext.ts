@@ -9,17 +9,17 @@ export type AppContextType = {
   filters: Filter[]
   addAssignment: (assignment: Assignment) => void
   setAssignments: (new_assignments: Assignment[]) => void
-  setAssignmentRendu: (i: string | null) => void
+  updateAssignment: (i: string | null, formData: any) => void
   deleteAssignment: (id: string) => void
 }
 
 export const AssignmentsContext = createContext<AppContextType>({
   assignments: [],
   filters: [],
-  addAssignment: () => {},
-  setAssignments: () => {},
-  setAssignmentRendu: () => {},
-  deleteAssignment: () => {},
+  addAssignment: () => { },
+  setAssignments: () => { },
+  updateAssignment: () => { },
+  deleteAssignment: () => { },
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
@@ -68,14 +68,17 @@ export const initAssignmentsContext = (
         })
     })
   }
-  function setAssignmentRendu(id: string | null) {
+  function updateAssignment(id: string | null, formData: any) {
     return new Promise((resolve) => {
       if (id !== null) {
         const newAssignments = [...assignments]
         const index = newAssignments.findIndex(
           (assignment) => assignment._id === id
         )
-        newAssignments[index].rendu = true
+        newAssignments[index].rendu = formData.rendu
+        newAssignments[index].nom = formData.nom
+        newAssignments[index].dateDeRendu = formData.dateDeRendu
+
         fetch('/api/assignments', {
           method: 'PUT',
           headers: {
@@ -83,10 +86,19 @@ export const initAssignmentsContext = (
           },
           body: JSON.stringify(newAssignments[index]),
         })
-          .then(() => {
-            setAssignments(newAssignments)
-            push(`Assignment ${newAssignments[index].nom} rendu !`, 'success')
-            resolve(null)
+          .then((payload) => {
+            if (payload.status === 200) {
+              setAssignments(newAssignments)
+              push(`Assignment ${newAssignments[index].nom} modifié !`, 'success')
+              resolve({ newAssignment: newAssignments[index] })
+            } else {
+              payload.json().then((data) => {
+                console.error(data.message)
+                push(`Erreur: ${data.message}`, 'error')
+                resolve(null)
+              })
+            }
+
           })
           .catch((err) => {
             console.error(err)
@@ -165,7 +177,7 @@ export const initAssignmentsContext = (
     filters,
     addAssignment,
     setAssignments,
-    setAssignmentRendu,
+    updateAssignment,
     deleteAssignment,
   }
 }

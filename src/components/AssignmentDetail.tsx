@@ -7,11 +7,21 @@ import {
   CardContent,
   CardActions,
   Switch,
+  IconButton,
+  TextField,
 } from '@mui/material'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import LoopIcon from '@mui/icons-material/Loop'
-import { useRouter } from 'next/router'
+import EditIcon from '@mui/icons-material/Edit'
+import CheckIcon from '@mui/icons-material/Check'
+import CloseIcon from '@mui/icons-material/Close'
+import useForm from '@/hooks/useForm'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import frLocale from 'date-fns/locale/fr'
+import DatePicker from '@mui/lab/DatePicker'
+import Assignment from '@/types/Assignment'
 
 type Props = {
   assignmentId: string | null
@@ -24,33 +34,64 @@ export default function AssignmentDetail({
   open,
   setModal,
 }: Props) {
-  const router = useRouter()
-  const { assignments, setAssignmentRendu } = useAssignmentsContext()
-  const assignment =
-    assignmentId !== null
-      ? assignments.find((a) => a._id === assignmentId)
-      : null
+  const { assignments, updateAssignment } = useAssignmentsContext()
+  const [assignment, setAssignment] = useState<Assignment | null>(null)
 
   const [loading, setLoading] = useState(false)
+  const [editing, setEditing] = useState(false)
 
-  async function renduChanged(event: any) {
-    if (event.target.checked) {
-      console.log('loading ...')
-      setLoading(true)
-      await setAssignmentRendu(assignmentId)
-      console.log('rendu !!!')
-      setLoading(false)
+  const { formValues, updateForm, setValue, setValues } = useForm({})
+
+  useEffect(() => {
+    if (assignmentId && assignments) {
+      const defaultAssignment =
+        assignmentId !== null
+          ? assignments.find((a) => a._id === assignmentId)
+          : null
+
+      if (defaultAssignment) {
+        setAssignment(defaultAssignment)
+        setValues([
+          { key: 'rendu', value: defaultAssignment.rendu },
+          { key: 'nom', value: defaultAssignment.nom },
+          {
+            key: 'dateDeRendu',
+            value: stringToDate(defaultAssignment.dateDeRendu),
+          },
+        ])
+      }
     }
+  }, [assignmentId, assignments])
+
+  function stringToDate(date: string): Date {
+    return new Date(date.split('/').reverse().join('/'))
+  }
+
+  async function onSubmit(e: any) {
+    e.preventDefault()
+    console.log(formValues)
+    console.log('loading ...')
+    setLoading(true)
+    const { newAssignment }: any = await updateAssignment(assignmentId, {
+      ...formValues,
+      dateDeRendu: formValues.dateDeRendu.toLocaleDateString(),
+    })
+    console.log(newAssignment)
+
+    console.log('modifié !!!')
+    setLoading(false)
+
+    setEditing(false)
+  }
+
+  function handleClose() {
+    setModal(false)
+    setEditing(false)
+    window.history.pushState({ path: '/' }, '', '/')
   }
 
   return (
-    <Modal
-      open={open}
-      onClose={() => {
-        setModal(false)
-        window.history.pushState({ path: '/' }, '', '/')
-      }}
-    >
+    <Modal open={open} onClose={handleClose}>
       <Card
         className={loading ? 'loading' : ''}
         sx={{
@@ -67,31 +108,106 @@ export default function AssignmentDetail({
         <div className="loader">
           <LoopIcon />
         </div>
-        <CardContent>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {assignment?.nom}
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {assignment?.rendu ? (
-              <>Ce devoir a été rendu le {assignment?.dateDeRendu}.</>
+        <form onSubmit={onSubmit}>
+          <CardContent>
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={handleClose}
+              sx={{
+                position: 'absolute',
+                top: '16px',
+                right: '28px',
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+            <div>
+              {editing ? (
+                <TextField
+                  name="nom"
+                  value={formValues.nom}
+                  size="small"
+                  onChange={updateForm}
+                  sx={{
+                    maxWidth: 'calc(100% - 60px)',
+                    width: '100%',
+                    marginBottom: '8px',
+                  }}
+                />
+              ) : (
+                <h2 style={{ marginTop: 0 }}>{assignment?.nom}</h2>
+              )}
+            </div>
+            <div>
+              {editing ? (
+                <LocalizationProvider
+                  dateAdapter={AdapterDateFns}
+                  locale={frLocale}
+                >
+                  <DatePicker
+                    value={formValues.dateDeRendu}
+                    InputProps={{ name: 'date' }}
+                    onChange={(date) => setValue('dateDeRendu', date)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        name="date"
+                        size="small"
+                        sx={{
+                          maxWidth: 'calc(100% - 60px)',
+                          width: '100%',
+                        }}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
+              ) : assignment?.rendu ? (
+                <p>Ce devoir a été rendu le {assignment?.dateDeRendu}.</p>
+              ) : (
+                <p>Ce devoir a été rendu le {assignment?.dateDeRendu}.</p>
+              )}
+
+              <FormControlLabel
+                style={{ display: 'block', marginTop: '8px' }}
+                disabled={!editing}
+                control={
+                  <Switch
+                    onChange={(e) => setValue('rendu', e.target.checked)}
+                    checked={formValues.rendu ?? false}
+                  />
+                }
+                label="Rendu"
+              />
+            </div>
+          </CardContent>
+          <CardActions>
+            {editing === true ? (
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{ gap: '8px' }}
+                color="success"
+                onClick={onSubmit}
+              >
+                <CheckIcon />
+                <div style={{ lineHeight: '10px' }}>Valider</div>
+              </Button>
             ) : (
-              <>Ce devoir a été rendu le {assignment?.dateDeRendu}.</>
+              <Button
+                size="small"
+                variant="outlined"
+                sx={{ gap: '8px' }}
+                onClick={() => {
+                  setEditing(true)
+                }}
+              >
+                <EditIcon />
+                <div style={{ lineHeight: '10px' }}>Editer</div>
+              </Button>
             )}
-            <FormControlLabel
-              disabled={assignment?.rendu}
-              style={{ display: 'block' }}
-              control={
-                <Switch onChange={renduChanged} checked={assignment?.rendu} />
-              }
-              label="Rendu"
-            />
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small" onClick={() => setModal(false)}>
-            Valider
-          </Button>
-        </CardActions>
+          </CardActions>
+        </form>
       </Card>
     </Modal>
   )

@@ -12,7 +12,7 @@ import {
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
+import VisibilityIcon from '@mui/icons-material/Visibility'
 import LoopIcon from '@mui/icons-material/Loop'
 import { green, red } from '@mui/material/colors'
 import { useState } from 'react'
@@ -51,7 +51,7 @@ export default function AssignmentItem({
             onClick={() => changeSelected(assignment._id)}
             disabled={!admin}
           >
-            <EditIcon />
+            <VisibilityIcon />
           </IconButton>
           <IconButton
             edge="end"
