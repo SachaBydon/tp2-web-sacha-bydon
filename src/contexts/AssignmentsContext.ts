@@ -119,32 +119,32 @@ export const initAssignmentsContext = (
     })
   }
 
-  useEffect(() => {
-    const queries = generateFiltersQueries()
-    console.log(queries)
+  // useEffect(() => {
+  //   const queries = generateFiltersQueries()
+  //   console.log(queries)
 
-    fetch('/api/assignments' + queries, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        res.json().then((payload) => {
-          if (res.status === 200) {
-            console.log(payload.data)
-            setAssignments(payload.data)
-          } else {
-            console.error(payload.message)
-            push(`Erreur: ${payload.message}`, 'error')
-          }
-        })
-      })
-      .catch((err) => {
-        console.error(err)
-        push(`Erreur: ${err}`, 'error')
-      })
-  }, [filters])
+  //   fetch('/api/assignments' + queries, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((res) => {
+  //       res.json().then((payload) => {
+  //         if (res.status === 200) {
+  //           console.log(payload.data)
+  //           setAssignments(payload.data)
+  //         } else {
+  //           console.error(payload.message)
+  //           push(`Erreur: ${payload.message}`, 'error')
+  //         }
+  //       })
+  //     })
+  //     .catch((err) => {
+  //       console.error(err)
+  //       push(`Erreur: ${err}`, 'error')
+  //     })
+  // }, [filters])
 
   function generateFiltersQueries() {
     let queries = ''
