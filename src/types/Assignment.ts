@@ -2,7 +2,7 @@
 type Assignment = {
   _id?: string
   nom: string
-  dateDeRendu: string
+  dateDeRendu: Date
   rendu?: boolean
 }
 

@@ -2,8 +2,7 @@ import { Assignments } from '@/components'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { login } from '@/pages/api/auth'
-// import { assignments } from '@/pages/api/assignments'
-import { getAllAssignments, addALotOffAssignments } from '@/pages/api/assignments'
+import { getAllAssignments } from '@/pages/api/assignments'
 import { useEffect } from 'react'
 import Assignment from '@/types/Assignment'
 
@@ -24,7 +23,6 @@ export async function getServerSideProps(context: any) {
     assignments = await getAllAssignments()
   }
 
-
   return {
     props: {
       admin: res.admin,
@@ -44,6 +42,7 @@ export default function Home({ admin, assignments }: Props) {
 
   useEffect(() => {
     setAdmin(admin)
+    assignments.forEach((a) => (a.dateDeRendu = new Date(a.dateDeRendu)))
     setAssignments(assignments)
   }, [])
 

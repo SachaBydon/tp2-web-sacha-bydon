@@ -56,7 +56,7 @@ export default function AssignmentDetail({
           { key: 'nom', value: defaultAssignment.nom },
           {
             key: 'dateDeRendu',
-            value: stringToDate(defaultAssignment.dateDeRendu),
+            value: defaultAssignment.dateDeRendu,
           },
         ])
       }
@@ -74,7 +74,7 @@ export default function AssignmentDetail({
     setLoading(true)
     const { newAssignment }: any = await updateAssignment(assignmentId, {
       ...formValues,
-      dateDeRendu: formValues.dateDeRendu.toLocaleDateString(),
+      // dateDeRendu: formValues.dateDeRendu.toLocaleDateString(),
     })
     console.log(newAssignment)
 
@@ -163,9 +163,15 @@ export default function AssignmentDetail({
                   />
                 </LocalizationProvider>
               ) : assignment?.rendu ? (
-                <p>Ce devoir a été rendu le {assignment?.dateDeRendu}.</p>
+                <p>
+                  Ce devoir a été rendu le{' '}
+                  {assignment?.dateDeRendu?.toLocaleDateString()}.
+                </p>
               ) : (
-                <p>Ce devoir a été rendu le {assignment?.dateDeRendu}.</p>
+                <p>
+                  Ce devoir a été rendu le{' '}
+                  {assignment?.dateDeRendu?.toLocaleDateString()}.
+                </p>
               )}
 
               <FormControlLabel

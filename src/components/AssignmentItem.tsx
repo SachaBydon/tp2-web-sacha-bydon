@@ -104,7 +104,7 @@ export default function AssignmentItem({ assignment, changeSelected }: Props) {
       </ListItemAvatar>
       <ListItemText
         primary={assignment.nom}
-        secondary={assignment.dateDeRendu}
+        secondary={assignment.dateDeRendu.toLocaleDateString()}
       />
     </ListItem>
   )

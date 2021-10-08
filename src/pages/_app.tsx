@@ -20,7 +20,7 @@ import {
 } from '@/contexts/SnackbarContext'
 
 //TODO: add eslint
-//TODO: fix dates
+//TODO: add JSDoc
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   const snackbarContext = initSnackbarContext()
   const assignmentsContext = initAssignmentsContext(snackbarContext)

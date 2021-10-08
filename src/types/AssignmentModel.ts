@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const AssignmentSchema = new mongoose.Schema({
   nom: String,
-  dateDeRendu: String,
+  dateDeRendu: Date,
   rendu: String,
 })
 

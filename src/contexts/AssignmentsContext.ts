@@ -47,6 +47,7 @@ export const initAssignmentsContext = (
         .then((res) => {
           if (res.status === 200) {
             res.json().then((payload) => {
+              payload.data.dateDeRendu = new Date(payload.data.dateDeRendu)
               console.log(payload.data)
               payload.data.rendu = payload.data.rendu === 'true' ? true : false
               setAssignments((prev) => [...prev, payload.data])

@@ -30,7 +30,7 @@ export default function AddAssignment() {
     setLoading(true)
     await add({
       nom: formValues.name,
-      dateDeRendu: formValues.date?.toLocaleDateString() ?? '',
+      dateDeRendu: formValues.date,
       rendu: false,
     } as Assignment)
     console.log('added !!!')
