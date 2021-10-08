@@ -8,6 +8,8 @@ import {
   ListItemText,
   IconButton,
   Tooltip,
+  Popover,
+  Button,
 } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
@@ -15,24 +17,24 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import LoopIcon from '@mui/icons-material/Loop'
 import { green, red } from '@mui/material/colors'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 type Props = {
   assignment: Assignment
   changeSelected: (i: string | undefined) => void
 }
 
-export default function AssignmentItem({
-  assignment,
-  changeSelected,
-}: Props) {
+export default function AssignmentItem({ assignment, changeSelected }: Props) {
   const { deleteAssignment } = useAssignmentsContext()
   const { admin } = useAuthContext()
   const [loading, setLoading] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const deleteButtonRef = useRef(null)
 
   async function remove() {
     if (assignment._id) {
       console.log('loading ...')
+      setDeleting(false)
       setLoading(true)
       await deleteAssignment(assignment._id)
       setLoading(false)
@@ -42,7 +44,7 @@ export default function AssignmentItem({
 
   return (
     <ListItem
-      className={loading  ? 'loading' : ''}
+      className={loading ? 'loading' : ''}
       secondaryAction={
         <div className="actions">
           <IconButton
@@ -56,11 +58,29 @@ export default function AssignmentItem({
           <IconButton
             edge="end"
             aria-label="delete"
-            onClick={() => remove()}
             disabled={!admin}
+            ref={deleteButtonRef}
+            onClick={() => setDeleting(true)}
           >
             <DeleteIcon />
           </IconButton>
+          <Popover
+            open={deleting}
+            anchorEl={deleteButtonRef.current}
+            onClose={() => setDeleting(false)}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+          >
+            <Button color="error" onClick={() => remove()}>
+              Supprimer ?
+            </Button>
+          </Popover>
         </div>
       }
     >

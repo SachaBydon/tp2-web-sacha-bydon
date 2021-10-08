@@ -26,7 +26,7 @@ body {
   scrollbar-color: hsl(210, 100%, 30%) hsl(210, 100%, 20%);
 }
 
-.MuiAlert-standard {
+.MuiAlert-standard, .MuiPopover-paper {
   background-color: var(--background);
   box-shadow: 0 0 10px hsl(210, 100%, 20%);
 }
