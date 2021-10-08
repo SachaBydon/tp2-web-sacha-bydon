@@ -63,19 +63,12 @@ export default function AssignmentDetail({
     }
   }, [assignmentId, assignments])
 
-  function stringToDate(date: string): Date {
-    return new Date(date.split('/').reverse().join('/'))
-  }
-
   async function onSubmit(e: any) {
     e.preventDefault()
     console.log(formValues)
     console.log('loading ...')
     setLoading(true)
-    const { newAssignment }: any = await updateAssignment(assignmentId, {
-      ...formValues,
-      // dateDeRendu: formValues.dateDeRendu.toLocaleDateString(),
-    })
+    const { newAssignment }: any = await updateAssignment(assignmentId, formValues)
     console.log(newAssignment)
 
     console.log('modifié !!!')

@@ -13,7 +13,7 @@ export async function getAllAssignments() {
         return {
           _id: assignment._id.toString(),
           nom: assignment.nom,
-          dateDeRendu: assignment.dateDeRendu,
+          dateDeRendu: assignment.dateDeRendu.toString(),
           rendu: assignment.rendu === 'true' ? true : false,
         }
       })
@@ -25,46 +25,20 @@ async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
   const query: any = {}
   if (req.query['rendu'] !== undefined) query.rendu = true
   else if (req.query['non-rendu'] !== undefined) query.rendu = false
-  else query.rendu = ''
-
   console.log(query)
   const sort: any = {
     date: req.query['orderby-date'] ? 1 : 0,
     nom: req.query['orderby-alpha'] ? 1 : 0,
   }
+  console.log(sort)
 
   try {
     const result = await Assignments.find(query).sort(sort)
-    // .aggregate([
-    //   {
-    //     $project: {
-    //       date: {
-    //         $dateFromString: {
-    //           dateString: '$dateDeRendu',
-    //           format: '%d/%m/%Y',
-    //         },
-    //       },
-    //       nom: 1,
-    //       rendu: 1,
-    //       dateDeRendu: 1,
-    //     },
-    //     // $sort: {
-    //     //   date: req.query['orderby-date'] ? 1 : 0,
-    //     //   nom: req.query['orderby-alpha'] ? 1 : 0,
-    //     // },
-    //     // $match: {
-    //     //   rendu:
-    //     // },
-    //     $match: Assignments.where('rendu').equals(true),
-    //   },
-    // ])
-
     const data = result.map((assignment) => {
       return {
         _id: assignment._id.toString(),
         nom: assignment.nom,
-        // dateDeRendu: assignment.dateDeRendu,
-        dateDeRendu: new Date(assignment.dateDeRendu),
+        dateDeRendu: assignment.dateDeRendu.toString(),
         rendu: assignment.rendu === 'true' ? true : false,
       }
     })
@@ -155,8 +129,8 @@ export async function addALotOffAssignments() {
   console.log('connected')
 
   const assignments: any[] = rawdata
-  for (const a of assignments) {
-    a.dateDeRendu = new Date(a.dateDeRendu)
+  for (const i in assignments) {
+    assignments[i].dateDeRendu = new Date(assignments[i].dateDeRendu['$date'])
   }
 
   const result = await Assignments.insertMany(assignments)

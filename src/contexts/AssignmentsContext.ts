@@ -16,10 +16,10 @@ export type AppContextType = {
 export const AssignmentsContext = createContext<AppContextType>({
   assignments: [],
   filters: [],
-  addAssignment: () => { },
-  setAssignments: () => { },
-  updateAssignment: () => { },
-  deleteAssignment: () => { },
+  addAssignment: () => {},
+  setAssignments: () => {},
+  updateAssignment: () => {},
+  deleteAssignment: () => {},
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
@@ -90,7 +90,10 @@ export const initAssignmentsContext = (
           .then((payload) => {
             if (payload.status === 200) {
               setAssignments(newAssignments)
-              push(`Assignment ${newAssignments[index].nom} modifié !`, 'success')
+              push(
+                `Assignment ${newAssignments[index].nom} modifié !`,
+                'success'
+              )
               resolve({ newAssignment: newAssignments[index] })
             } else {
               payload.json().then((data) => {
@@ -99,7 +102,6 @@ export const initAssignmentsContext = (
                 resolve(null)
               })
             }
-
           })
           .catch((err) => {
             console.error(err)
@@ -148,6 +150,9 @@ export const initAssignmentsContext = (
   //     .then((res) => {
   //       res.json().then((payload) => {
   //         if (res.status === 200) {
+  //           payload.data.forEach((a: any) => {
+  //             a.dateDeRendu = new Date(a.dateDeRendu)
+  //           })
   //           console.log(payload.data)
   //           setAssignments(payload.data)
   //         } else {
