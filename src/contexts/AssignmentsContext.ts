@@ -116,11 +116,14 @@ export const initAssignmentsContext = (
         method: 'DELETE',
       })
         .then(() => {
+          const deletedAssignment = assignments.find(
+            (assignment) => assignment._id === id
+          )
           const newAssignments = assignments.filter(
             (assignment) => assignment._id !== id
           )
           setAssignments(newAssignments)
-          push(`Assignment ${id} supprimé !`, 'success')
+          push(`Assignment ${deletedAssignment?.nom} supprimé !`, 'success')
           resolve(null)
         })
         .catch((err) => {
