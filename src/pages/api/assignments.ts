@@ -23,8 +23,8 @@ export async function getAllAssignments() {
 
 async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
   const query: any = {}
-  if(req.query['rendu'] !== undefined) query.rendu = true
-  else if(req.query['non-rendu'] !== undefined) query.rendu = false
+  if (req.query['rendu'] !== undefined) query.rendu = true
+  else if (req.query['non-rendu'] !== undefined) query.rendu = false
   else query.rendu = ''
 
   console.log(query)
@@ -58,8 +58,6 @@ async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
     //     $match: Assignments.where('rendu').equals(true),
     //   },
     // ])
-
-    
 
     const data = result.map((assignment) => {
       return {
@@ -155,14 +153,12 @@ export async function addALotOffAssignments() {
   console.log('connecting ...')
   await dbConnect()
   console.log('connected')
-  
 
-  for(const a of rawdata) {
+  const assignments: any[] = rawdata
+  for (const a of assignments) {
     a.dateDeRendu = new Date(a.dateDeRendu)
   }
 
-
-  const result = await Assignments.insertMany(rawdata)
+  const result = await Assignments.insertMany(assignments)
   console.log(result)
-  
 }
