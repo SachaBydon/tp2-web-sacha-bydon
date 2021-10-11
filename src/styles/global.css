@@ -27,8 +27,8 @@ body {
 }
 
 .MuiAlert-standard, .MuiPopover-paper {
-  background-color: var(--background);
-  box-shadow: 0 0 10px hsl(210, 100%, 20%);
+  background-color: var(--background)!important;
+  box-shadow: 0 0 10px hsl(210, 100%, 20%)!important;
 }
 
 
