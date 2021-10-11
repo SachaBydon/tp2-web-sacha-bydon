@@ -18,9 +18,12 @@ import {
   initSnackbarContext,
   SnackbarContext,
 } from '@/contexts/SnackbarContext'
+import Head from "next/head"
+
 
 //TODO: add eslint
 //TODO: add JSDoc
+//TODO: use css modules
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   const snackbarContext = initSnackbarContext()
   const assignmentsContext = initAssignmentsContext(snackbarContext)
@@ -48,6 +51,9 @@ export default function MyApp({ Component, pageProps, router }: AppProps) {
                 {snackbarContext.snackbar.message}
               </Alert>
             </Snackbar>
+            <Head>
+              <title>Assignments</title>
+            </Head>
             <Component {...pageProps} />
             {/* <CustomRoutes router={router}>
             </CustomRoutes> */}

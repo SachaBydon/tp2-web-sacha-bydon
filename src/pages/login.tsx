@@ -10,7 +10,7 @@ import LoginIcon from '@mui/icons-material/Login'
 import { LoadingFabButton } from '@/components'
 import useForm from '@/hooks/useForm'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Router from 'next/router'
 import { login } from '@/pages/api/auth'
 
@@ -37,10 +37,15 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const { login } = useAuthContext()
+  const firstInputRef = useRef<HTMLInputElement>(null)
 
   function onFormChange() {
     setError('')
   }
+
+  useEffect(() => {
+    firstInputRef.current?.focus()
+  }, [firstInputRef.current])
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -68,6 +73,7 @@ export default function Login() {
             value={formValues.username}
             onChange={updateForm}
             autoFocus
+            inputRef={firstInputRef}
           />
         </FormGroup>
         <FormGroup>
