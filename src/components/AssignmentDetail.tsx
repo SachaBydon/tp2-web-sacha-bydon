@@ -22,6 +22,8 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import frLocale from 'date-fns/locale/fr'
 import DatePicker from '@mui/lab/DatePicker'
 import Assignment from '@/types/Assignment'
+import styles from '@/styles/AssignmentItem.module.scss'
+
 
 type Props = {
   assignmentId: string | null
@@ -86,7 +88,7 @@ export default function AssignmentDetail({
   return (
     <Modal open={open} onClose={handleClose}>
       <Card
-        className={loading ? 'loading' : ''}
+        className={loading ? styles.loading : ''}
         sx={{
           position: 'absolute',
           top: '50%',
@@ -98,7 +100,7 @@ export default function AssignmentDetail({
           backgroundColor: 'var(--background)',
         }}
       >
-        <div className="loader">
+        <div className={`rotate-animation ${styles.loader}`}>
           <LoopIcon />
         </div>
         <form onSubmit={onSubmit}>
