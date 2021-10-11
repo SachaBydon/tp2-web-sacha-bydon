@@ -8,13 +8,15 @@ export type AuthContextType = {
   admin: boolean
   login: (user: any) => void
   setAdmin: (admin: boolean) => void
+  setLoggedIn: (loggedIn: boolean) => void
 }
 
 export const AuthContext = createContext<AuthContextType>({
   loggedIn: false,
   admin: false,
   login: () => { },
-  setAdmin: () => { }
+  setAdmin: () => { },
+  setLoggedIn: () => { }
 })
 export const useAuthContext = () => useContext(AuthContext)
 
@@ -49,5 +51,5 @@ export const initAuthContext = () => {
     })
   }
 
-  return { loggedIn, login, admin, setAdmin }
+  return { loggedIn, login, setLoggedIn, admin, setAdmin }
 }

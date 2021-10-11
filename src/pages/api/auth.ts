@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import dbConnect from '@/lib/dbConnect'
+import Users from '@/types/UserModel'
 
 interface ICredentials {
   username: string
@@ -10,7 +12,6 @@ type UserStatus = {
 }
 
 class Credentials implements ICredentials {
-
   username: string
   password: string
 
@@ -20,45 +21,39 @@ class Credentials implements ICredentials {
   }
 
   equals(creds: Credentials) {
-    return creds.username === this.username
-      && creds.password === this.password
+    return creds.username === this.username && creds.password === this.password
   }
 }
 
-const ADMIN_CREDS: Credentials = new Credentials({
-  username: 'admin',
-  password: 'alligator'
-})
-const USER_CREDS: Credentials = new Credentials({
-  username: 'user',
-  password: 'langouste'
-})
-
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
-  const provided_creds = new Credentials(req.body as ICredentials)
 
-  let user_status: UserStatus
-  if (provided_creds.equals(USER_CREDS)) user_status = { value: 'user' }
-  else if (provided_creds.equals(ADMIN_CREDS)) user_status = { value: 'admin' }
-  else user_status = { value: 'not_logged' }
+  // console.log('connecting ...')
+  await dbConnect()
+  // console.log('connected')
 
-  console.log(provided_creds);
+  const user = new Credentials(req.body)
+  const result = await Users.findOne(user)
+  // console.log('result: ' + result)
 
-  console.log(user_status)
+  const user_status: UserStatus = {
+    value: result ? result.role : 'not_logged',
+  }
   res.status(200).json({ user_status })
 }
 
+export async function login(user: ICredentials) {
+  // console.log('connecting ...')
+  await dbConnect()
+  // console.log('connected')
 
+  const result = await Users.findOne(user)
+  // console.log('result: ' + result)
 
-export function login(user: ICredentials) {
-  console.log('function login /api/auth.ts')
-  
-  const creds = new Credentials(user)
   return {
-    logged: (creds.equals(USER_CREDS) || creds.equals(ADMIN_CREDS)),
-    admin: creds.equals(ADMIN_CREDS)
+    logged: result !== null,
+    admin: result?.role === 'admin',
   }
 }

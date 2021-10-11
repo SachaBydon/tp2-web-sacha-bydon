@@ -9,7 +9,7 @@ import Assignment from '@/types/Assignment'
 export async function getServerSideProps(context: any) {
   let { user } = context.req.cookies
   user = user ? JSON.parse(user) : undefined
-  const res: any = user === undefined ? { logged: false } : login(user)
+  const res: any = user === undefined ? { logged: false } : await login(user)
   let assignments: Assignment[] = []
 
   if (!res.logged) {
@@ -26,6 +26,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       admin: res.admin,
+      logged: res.logged,
       assignments,
     },
   }
@@ -33,15 +34,17 @@ export async function getServerSideProps(context: any) {
 
 type Props = {
   admin: boolean
+  logged: boolean
   assignments: Assignment[]
 }
 
-export default function Home({ admin, assignments }: Props) {
-  const { setAdmin } = useAuthContext()
+export default function Home({ admin, logged, assignments }: Props) {
+  const { setAdmin, setLoggedIn } = useAuthContext()
   const { setAssignments } = useAssignmentsContext()
 
   useEffect(() => {
     setAdmin(admin)
+    setLoggedIn(logged)
     assignments.forEach((a) => (a.dateDeRendu = new Date(a.dateDeRendu)))
     setAssignments(assignments)
   }, [])

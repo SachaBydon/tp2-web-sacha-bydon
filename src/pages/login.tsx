@@ -17,7 +17,7 @@ import { login } from '@/pages/api/auth'
 export async function getServerSideProps(context: any) {
   let { user } = context.req.cookies
   user = user ? JSON.parse(user) : undefined
-  const res: any = user === undefined ? { logged: false } : login(user)
+  const res: any = user === undefined ? { logged: false } : await login(user)
 
   if (res.logged) {
     return {

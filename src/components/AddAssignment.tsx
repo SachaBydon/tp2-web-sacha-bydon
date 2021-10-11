@@ -10,6 +10,7 @@ import useForm from '@/hooks/useForm'
 import { useAuthContext } from '@/contexts/AuthContext'
 import Assignment from '@/types/Assignment'
 import { LoadingFabButton } from '@/components'
+import { ClickAwayListener } from '@mui/material'
 
 export default function AddAssignment() {
   const { addAssignment: add } = useAssignmentsContext()
@@ -56,47 +57,52 @@ export default function AddAssignment() {
   }, [])
 
   return (
-    <div id="AddAssignment" className={formVisible ? 'add-open' : ''}>
-      <form onSubmit={onSubmit} className={formVisible ? '' : 'hide'}>
-        <FormGroup>
-          <TextField
-            name="name"
-            label="Nom"
-            inputRef={firstInputRef}
-            value={formValues.name}
-            onChange={updateForm}
-          />
-        </FormGroup>
-        <FormGroup>
-          <LocalizationProvider dateAdapter={AdapterDateFns} locale={frLocale}>
-            <DatePicker
-              label="Date de rendu"
-              value={formValues.date}
-              InputProps={{ name: 'date' }}
-              onChange={(date) => setValue('date', date)}
-              renderInput={(params) => <TextField {...params} name="date" />}
+    <ClickAwayListener onClickAway={() => setFormVisible(false)}>
+      <div id="AddAssignment" className={formVisible ? 'add-open' : ''}>
+        <form onSubmit={onSubmit} className={formVisible ? '' : 'hide'}>
+          <FormGroup>
+            <TextField
+              name="name"
+              label="Nom"
+              inputRef={firstInputRef}
+              value={formValues.name}
+              onChange={updateForm}
             />
-          </LocalizationProvider>
-        </FormGroup>
-        <FormGroup>
-          <LoadingFabButton
-            text="Ajouter un devoir"
-            loadingText="Ajout du devoir ..."
-            disabled={!formValues.name.length || formValues.date === null}
-            loading={loading}
-            icon={<AddIcon />}
-          />
-        </FormGroup>
-      </form>
-      <div className={formVisible ? 'hide' : ''}>
-        <Fab
-          color="primary"
-          onClick={() => setFormVisible(true)}
-          disabled={!admin}
-        >
-          <AddIcon />
-        </Fab>
+          </FormGroup>
+          <FormGroup>
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              locale={frLocale}
+            >
+              <DatePicker
+                label="Date de rendu"
+                value={formValues.date}
+                InputProps={{ name: 'date' }}
+                onChange={(date) => setValue('date', date)}
+                renderInput={(params) => <TextField {...params} name="date" />}
+              />
+            </LocalizationProvider>
+          </FormGroup>
+          <FormGroup>
+            <LoadingFabButton
+              text="Ajouter un devoir"
+              loadingText="Ajout du devoir ..."
+              disabled={!formValues.name.length || formValues.date === null}
+              loading={loading}
+              icon={<AddIcon />}
+            />
+          </FormGroup>
+        </form>
+        <div className={formVisible ? 'hide' : ''}>
+          <Fab
+            color="primary"
+            onClick={() => setFormVisible(true)}
+            disabled={!admin}
+          >
+            <AddIcon />
+          </Fab>
+        </div>
       </div>
-    </div>
+    </ClickAwayListener>
   )
 }
