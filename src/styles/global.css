@@ -40,9 +40,20 @@ body {
     transform: rotate(360deg);
   }
 }
+@keyframes rotate-svg {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
 
 .rotate-animation {
   animation: 1.5s rotate infinite linear;
+}
+.rotate-animation-svg svg {
+  animation: 1.5s rotate-svg infinite linear;
 }
 
 #AddAssignment .MuiInputBase-root {

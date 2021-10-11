@@ -100,7 +100,7 @@ export default function AssignmentDetail({
           backgroundColor: 'var(--background)',
         }}
       >
-        <div className={`rotate-animation ${styles.loader}`}>
+        <div className={`rotate-animation-svg ${styles.loader}`}>
           <LoopIcon />
         </div>
         <form onSubmit={onSubmit}>

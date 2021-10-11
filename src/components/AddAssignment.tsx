@@ -102,7 +102,6 @@ export default function AddAssignment() {
             color="primary"
             onClick={() => setFormVisible(true)}
             disabled={!admin}
-            className={styles.button}
           >
             <AddIcon />
           </Fab>

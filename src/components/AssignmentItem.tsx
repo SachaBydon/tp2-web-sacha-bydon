@@ -85,7 +85,7 @@ export default function AssignmentItem({ assignment, changeSelected }: Props) {
         </div>
       }
     >
-      <div className={`rotate-animation ${styles.loader}`}>
+      <div className={`rotate-animation-svg ${styles.loader}`}>
         <LoopIcon />
       </div>
       <ListItemAvatar>

@@ -22,6 +22,10 @@ export default function LoadingFabButton({
       type="submit"
       disabled={disabled || loading}
       variant="extended"
+      sx={{
+        boxShadow: 'none',
+        gap: '8px'
+      }}
     >
       {loading ? (
         <>
