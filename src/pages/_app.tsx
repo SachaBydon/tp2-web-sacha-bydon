@@ -1,9 +1,5 @@
 import { AppProps } from 'next/app'
 import '@/styles/global.css'
-import '@/styles/AddAssignment.scss'
-import '@/styles/Assignments.scss'
-import '@/styles/Login.scss'
-import '@/styles/AssignmentItem.scss'
 import { Snackbar, Alert } from '@mui/material'
 
 import {
@@ -23,7 +19,6 @@ import Head from "next/head"
 
 //TODO: add eslint
 //TODO: add JSDoc
-//TODO: use css modules
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   const snackbarContext = initSnackbarContext()
   const assignmentsContext = initAssignmentsContext(snackbarContext)

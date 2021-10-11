@@ -11,6 +11,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import Assignment from '@/types/Assignment'
 import { LoadingFabButton } from '@/components'
 import { ClickAwayListener } from '@mui/material'
+import styles from '@/styles/AddAssignment.module.scss'
 
 export default function AddAssignment() {
   const { addAssignment: add } = useAssignmentsContext()
@@ -59,7 +60,10 @@ export default function AddAssignment() {
   return (
     <ClickAwayListener onClickAway={() => setFormVisible(false)}>
       <div id="AddAssignment" className={formVisible ? 'add-open' : ''}>
-        <form onSubmit={onSubmit} className={formVisible ? '' : 'hide'}>
+        <form
+          onSubmit={onSubmit}
+          className={`${styles.form} ${formVisible ? '' : styles.hideForm}`}
+        >
           <FormGroup>
             <TextField
               name="name"
@@ -93,11 +97,12 @@ export default function AddAssignment() {
             />
           </FormGroup>
         </form>
-        <div className={formVisible ? 'hide' : ''}>
+        <div className={`${styles.add} ${formVisible ? styles.hideAdd : ''}`}>
           <Fab
             color="primary"
             onClick={() => setFormVisible(true)}
             disabled={!admin}
+            className={styles.button}
           >
             <AddIcon />
           </Fab>

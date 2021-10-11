@@ -31,6 +31,33 @@ body {
   box-shadow: 0 0 10px hsl(210, 100%, 20%);
 }
 
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-animation {
+  animation: 1.5s rotate infinite linear;
+}
+
+#AddAssignment .MuiInputBase-root {
+  height: 48px;
+}
+#AddAssignment .MuiTextField-root > label {
+  top: -4px;
+}
+
+@media screen and (max-width: 700px) {
+  .add-open + .list {
+    max-height: calc(100vh - 400px)!important;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

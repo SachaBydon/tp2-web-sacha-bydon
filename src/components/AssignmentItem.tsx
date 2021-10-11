@@ -18,6 +18,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import LoopIcon from '@mui/icons-material/Loop'
 import { green, red } from '@mui/material/colors'
 import { useState, useRef } from 'react'
+import styles from '@/styles/AssignmentItem.module.scss'
 
 type Props = {
   assignment: Assignment
@@ -44,9 +45,9 @@ export default function AssignmentItem({ assignment, changeSelected }: Props) {
 
   return (
     <ListItem
-      className={loading ? 'loading' : ''}
+      className={loading ? styles.loading : ''}
       secondaryAction={
-        <div className="actions">
+        <div className={styles.actions}>
           <IconButton
             edge="end"
             aria-label="edit"
@@ -84,7 +85,7 @@ export default function AssignmentItem({ assignment, changeSelected }: Props) {
         </div>
       }
     >
-      <div className="loader">
+      <div className={`rotate-animation ${styles.loader}`}>
         <LoopIcon />
       </div>
       <ListItemAvatar>

@@ -1,0 +1,44 @@
+.form {
+  &.hideForm {
+    display: none;
+  }
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 16px 0;
+
+  & > :not(:last-child) {
+    flex: 1;
+  }
+
+  @media screen and (max-width: 700px) {
+    & {
+      flex-direction: column;
+
+      & > * {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.add {
+  margin: 16px 0;
+  margin-left: auto;
+  width: fit-content;
+
+  & > button {
+    width: 48px;
+    height: 48px;
+  }
+  &.hideAdd {
+    display: none;
+  }
+}
+
+.button {
+  box-shadow: none;
+  gap: 8px;
+}

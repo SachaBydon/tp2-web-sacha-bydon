@@ -13,6 +13,8 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useState, useRef, useEffect } from 'react'
 import Router from 'next/router'
 import { login } from '@/pages/api/auth'
+import styles from '@/styles/Login.module.scss'
+
 
 export async function getServerSideProps(context: any) {
   let { user } = context.req.cookies
@@ -62,7 +64,7 @@ export default function Login() {
   }
 
   return (
-    <Paper variant="outlined" id="Login">
+    <Paper variant="outlined" className={styles.login}>
       <h1>Connexion</h1>
       <form onSubmit={onSubmit}>
         <FormGroup>

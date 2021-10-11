@@ -3,6 +3,7 @@ import { AssignmentDetail, AddAssignment, AssignmentItem } from '@/components'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import { List, Pagination } from '@mui/material'
 import { useRouter } from 'next/router'
+import styles from '@/styles/Assignments.module.scss'
 
 const ITEMS_PER_PAGE = 10
 
@@ -46,7 +47,7 @@ export default function Assignments() {
   }
 
   return (
-    <div className="Assignments">
+    <div className={styles.Assignments}>
       <AssignmentDetail
         assignmentId={selectedId}
         open={openModale}
@@ -56,7 +57,7 @@ export default function Assignments() {
       <h1>{titre}</h1>
       <AddAssignment />
 
-      <List className="list">
+      <List className={styles.list}>
         {filteredAssignments.map((assignment, index) => (
           <AssignmentItem
             key={index}
@@ -65,7 +66,7 @@ export default function Assignments() {
           />
         ))}
       </List>
-      <div className="pagination">
+      <div className={styles.pagination}>
         <Pagination count={nbPages} onChange={pageChanged} />
       </div>
     </div>
