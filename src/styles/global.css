@@ -59,7 +59,7 @@ body {
 #AddAssignment .MuiInputBase-root {
   height: 48px;
 }
-#AddAssignment .MuiTextField-root > label {
+#AddAssignment .MuiTextField-root > label[data-shrink="false"] {
   top: -4px;
 }
 
