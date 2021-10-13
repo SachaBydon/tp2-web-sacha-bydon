@@ -27,6 +27,7 @@ export async function getServerSideProps(context: any) {
     props: {
       admin: res.admin,
       logged: res.logged,
+      username: user?.username,
       assignments,
     },
   }
@@ -35,16 +36,18 @@ export async function getServerSideProps(context: any) {
 type Props = {
   admin: boolean
   logged: boolean
+  username: string
   assignments: Assignment[]
 }
 
-export default function Home({ admin, logged, assignments }: Props) {
-  const { setAdmin, setLoggedIn } = useAuthContext()
+export default function Home({ admin, logged, username, assignments }: Props) {
+  const { setAdmin, setLoggedIn, setUsername } = useAuthContext()
   const { setAssignments } = useAssignmentsContext()
 
   useEffect(() => {
     setAdmin(admin)
     setLoggedIn(logged)
+    setUsername(username)
     assignments.forEach((a) => (a.dateDeRendu = new Date(a.dateDeRendu)))
     setAssignments(assignments)
   }, [])
