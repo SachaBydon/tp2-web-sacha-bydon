@@ -7,6 +7,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import { useRouter } from 'next/router'
 import styles from '@/styles/Assignments.module.scss'
 import { destroyCookie } from 'nookies'
+import { style } from '@mui/system'
 
 const ITEMS_PER_PAGE = 10
 
@@ -74,15 +75,18 @@ export default function Assignments() {
       </div>
       <AddAssignment />
 
-      <List className={styles.list}>
-        {filteredAssignments.map((assignment, index) => (
-          <AssignmentItem
-            key={index}
-            assignment={assignment}
-            changeSelected={changeSelected}
-          />
-        ))}
-      </List>
+      <div className={styles.overlay}>
+        <List className={styles.list}>
+          {filteredAssignments.map((assignment, index) => (
+            <AssignmentItem
+              key={index}
+              assignment={assignment}
+              changeSelected={changeSelected}
+            />
+          ))}
+        </List>
+      </div>
+
       <div className={styles.pagination}>
         <Pagination count={nbPages} onChange={pageChanged} />
       </div>
