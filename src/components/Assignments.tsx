@@ -75,7 +75,7 @@ export default function Assignments() {
       </div>
       <AddAssignment />
 
-      <div className={styles.overlay}>
+      <div className={styles.overlay} data-overlay>
         <List className={styles.list}>
           {filteredAssignments.map((assignment, index) => (
             <AssignmentItem

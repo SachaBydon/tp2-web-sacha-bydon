@@ -13,6 +13,12 @@
     h1 {
       margin: 0;
       width: -webkit-fill-available;
+
+      @media screen and (max-width: 500px) {
+        & {
+          font-size: 20px;
+        }
+      }
     }
 
     & > div {
@@ -38,6 +44,9 @@
 
   .overlay {
     position: relative;
+    max-height: calc(100vh - 245px);
+    height: 100%;
+
 
     &::after {
       content: '';
@@ -57,7 +66,7 @@
     }
 
     .list {
-      max-height: calc(100vh - 245px);
+      max-height: inherit;
       overflow-y: auto;
     }
   }
