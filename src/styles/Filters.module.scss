@@ -2,7 +2,10 @@
   display: flex;
   gap: 16px;
   align-items: center;
+  justify-content: flex-end;
   margin-right: 16px;
+  flex-wrap: wrap;
+  flex: auto;
 
   [data-active='true'] {
     background-color: rgb(144, 202, 249)!important;
