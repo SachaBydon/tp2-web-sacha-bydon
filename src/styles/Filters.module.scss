@@ -1,0 +1,15 @@
+.Filters {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-right: 16px;
+
+  [data-active='true'] {
+    background-color: rgb(144, 202, 249);
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  [data-close] {
+    padding: 0;
+  }
+}

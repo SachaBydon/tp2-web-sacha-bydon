@@ -26,11 +26,11 @@ body {
   scrollbar-color: hsl(210, 100%, 30%) hsl(210, 100%, 20%);
 }
 
-.MuiAlert-standard, .MuiPopover-paper {
-  background-color: var(--background)!important;
-  box-shadow: 0 0 10px hsl(210, 100%, 20%)!important;
+.MuiAlert-standard,
+.MuiPopover-paper {
+  background-color: var(--background) !important;
+  box-shadow: 0 0 10px hsl(210, 100%, 20%) !important;
 }
-
 
 @keyframes rotate {
   from {
@@ -59,13 +59,16 @@ body {
 #AddAssignment .MuiInputBase-root {
   height: 48px;
 }
-#AddAssignment .MuiTextField-root > label[data-shrink="false"] {
+#AddAssignment .MuiTextField-root > label[data-shrink='false'] {
   top: -4px;
+}
+#AddAssignment {
+  flex: auto;
 }
 
 @media screen and (max-width: 755px) {
-  .add-open + [data-overlay] {
-    max-height: calc(100vh - 400px)!important;
+  .add + [data-overlay] {
+    max-height: calc(100vh - 400px) !important;
   }
 }
 

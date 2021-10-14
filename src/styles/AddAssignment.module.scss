@@ -1,13 +1,8 @@
 .form {
-  &.hideForm {
-    display: none;
-  }
-
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  margin: 16px 0;
 
   & > :not(:last-child) {
     flex: 1;
@@ -35,5 +30,13 @@
   }
   &.hideAdd {
     display: none;
+  }
+}
+
+.submit {
+  @media screen and (min-width: 755.1px) {
+    & {
+      border-radius: 99px 0 0 99px;
+    }
   }
 }

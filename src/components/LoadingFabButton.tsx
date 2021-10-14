@@ -7,6 +7,7 @@ type Props = {
   text: string
   loadingText: string
   loading: boolean
+  className?: string
 }
 
 export default function LoadingFabButton({
@@ -15,6 +16,7 @@ export default function LoadingFabButton({
   text,
   loadingText,
   loading,
+  className,
 }: Props) {
   return (
     <Fab
@@ -24,8 +26,9 @@ export default function LoadingFabButton({
       variant="extended"
       sx={{
         boxShadow: 'none',
-        gap: '8px'
+        gap: '8px',
       }}
+      className={className}
     >
       {loading ? (
         <>

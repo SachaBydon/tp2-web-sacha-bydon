@@ -1,20 +1,19 @@
 import { useState, useEffect } from 'react'
-import { AssignmentDetail, AddAssignment, AssignmentItem } from '@/components'
+import { AssignmentDetail, AddAssignment, AssignmentItem, Actions } from '@/components'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { List, Pagination, Fab } from '@mui/material'
+import { List, Pagination, IconButton } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout'
 import { useRouter } from 'next/router'
 import styles from '@/styles/Assignments.module.scss'
 import { destroyCookie } from 'nookies'
-import { style } from '@mui/system'
 
 const ITEMS_PER_PAGE = 10
 
 export default function Assignments() {
   const router = useRouter()
 
-  const titre: string = 'Mon application sur les assignments'
+  const titre: string = 'Assignments'
 
   const { assignments } = useAssignmentsContext()
   const { username } = useAuthContext()
@@ -62,18 +61,19 @@ export default function Assignments() {
         <h1>{titre}</h1>
         <div>
           {username}
-          <Fab
-            color="secondary"
+          <IconButton
+            color="error"
             onClick={() => {
               destroyCookie(null, 'user')
               location.reload()
             }}
           >
             <LogoutIcon />
-          </Fab>
+          </IconButton>
         </div>
       </div>
-      <AddAssignment />
+      {/* <AddAssignment /> */}
+      <Actions />
 
       <div className={styles.overlay} data-overlay>
         <List className={styles.list}>
