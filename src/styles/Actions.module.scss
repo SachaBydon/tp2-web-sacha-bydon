@@ -1,16 +1,16 @@
 .fab {
-  width: 48px;
-  height: 48px;
+  width: 48px!important;
+  height: 48px!important;
 }
 
 .fabCustom {
-  border-radius: 0 99px 99px 0;
-  box-shadow: none;
-  border-left: 1px solid rgba(0, 0, 0, 0.87);
+  border-radius: 0 99px 99px 0!important;
+  box-shadow: none!important;
+  border-left: 1px solid rgba(0, 0, 0, 0.87)!important;
 
   @media screen and (max-width: 755px) {
     & {
-      position: absolute;
+      position: absolute!important;
     }
   }
 }

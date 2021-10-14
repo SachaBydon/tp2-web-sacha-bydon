@@ -6,8 +6,8 @@ import { SnackbarContextType } from './SnackbarContext'
 
 export type AppContextType = {
   assignments: Assignment[]
-  filters: Filter[]
-  setFilters: (filters: any[]) => void
+  filters: Filter[] | null
+  setFilters: (filters: Filter[] | null) => void
   addAssignment: (assignment: Assignment) => void
   setAssignments: (new_assignments: Assignment[]) => void
   updateAssignment: (i: string | null, formData: any) => void

@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close'
 
 import { useState, useEffect } from 'react'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
+import Filter from '@/types/Filter'
 
 type Tri = 'date' | 'nom' | null | undefined
 type Rendu = Boolean | null | undefined
@@ -15,9 +16,9 @@ export default function Filters() {
   console.log(filters)
 
   useEffect(() => {
-    if(tri === defaultTri() && rendu === defaultRendu()) return
+    if (tri === defaultTri() && rendu === defaultRendu()) return
 
-    const new_filters = []
+    const new_filters: Filter[] = []
     if (tri === 'date') new_filters.push('orderby-date')
     if (tri === 'nom') new_filters.push('orderby-alpha')
     if (rendu === true) new_filters.push('rendu')
