@@ -7,6 +7,7 @@ import { SnackbarContextType } from './SnackbarContext'
 export type AppContextType = {
   assignments: Assignment[]
   filters: Filter[]
+  setFilters: (filters: any[]) => void
   addAssignment: (assignment: Assignment) => void
   setAssignments: (new_assignments: Assignment[]) => void
   updateAssignment: (i: string | null, formData: any) => void
@@ -16,6 +17,7 @@ export type AppContextType = {
 export const AssignmentsContext = createContext<AppContextType>({
   assignments: [],
   filters: [],
+  setFilters: () => {},
   addAssignment: () => {},
   setAssignments: () => {},
   updateAssignment: () => {},
@@ -27,12 +29,7 @@ export const initAssignmentsContext = (
   snackbarContext: SnackbarContextType
 ) => {
   const [assignments, setAssignments] = useState<Assignment[]>([])
-  const [filters, setFilters] = useState<Filter[]>([
-    'orderby-date',
-    // 'orderby-alpha',
-    // 'rendu',
-    'non-rendu',
-  ])
+  const [filters, setFilters] = useState<Filter[] | null>(null)
   const { push } = snackbarContext
 
   function addAssignment(assignment: Assignment) {
@@ -137,37 +134,37 @@ export const initAssignmentsContext = (
     })
   }
 
-  // useEffect(() => {
-  //   const queries = generateFiltersQueries()
-  //   console.log(queries)
+  useEffect(() => {
+    if (filters === null) return
+    const queries = generateFiltersQueries()
 
-  //   fetch('/api/assignments' + queries, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then((res) => {
-  //       res.json().then((payload) => {
-  //         if (res.status === 200) {
-  //           payload.data.forEach((a: any) => {
-  //             a.dateDeRendu = new Date(a.dateDeRendu)
-  //           })
-  //           console.log(payload.data)
-  //           setAssignments(payload.data)
-  //         } else {
-  //           console.error(payload.message)
-  //           push(`Erreur: ${payload.message}`, 'error')
-  //         }
-  //       })
-  //     })
-  //     .catch((err) => {
-  //       console.error(err)
-  //       push(`Erreur: ${err}`, 'error')
-  //     })
-  // }, [filters])
+    fetch('/api/assignments' + queries, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        res.json().then((payload) => {
+          if (res.status === 200) {
+            payload.data.forEach((a: any) => {
+              a.dateDeRendu = new Date(a.dateDeRendu)
+            })
+            setAssignments(payload.data)
+          } else {
+            console.error(payload.message)
+            push(`Erreur: ${payload.message}`, 'error')
+          }
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+        push(`Erreur: ${err}`, 'error')
+      })
+  }, [filters])
 
   function generateFiltersQueries() {
+    if(filters === null) return
     let queries = ''
     if (filters.length > 0) {
       queries += '?'
@@ -188,5 +185,6 @@ export const initAssignmentsContext = (
     setAssignments,
     updateAssignment,
     deleteAssignment,
+    setFilters,
   }
 }

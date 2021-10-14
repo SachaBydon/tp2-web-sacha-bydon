@@ -25,11 +25,10 @@ async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
   const query: any = {}
   if (req.query['rendu'] !== undefined) query.rendu = true
   else if (req.query['non-rendu'] !== undefined) query.rendu = false
-  console.log(query)
-  const sort: any = {
-    date: req.query['orderby-date'] ? 1 : 0,
-    nom: req.query['orderby-alpha'] ? 1 : 0,
-  }
+
+  const sort: any = {}
+  if (req.query['orderby-date'] !== undefined) sort.dateDeRendu = 1
+  else if (req.query['orderby-alpha'] !== undefined) sort.nom = 1
   console.log(sort)
 
   try {
@@ -42,7 +41,6 @@ async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
         rendu: assignment.rendu === 'true' ? true : false,
       }
     })
-    console.log(data)
     return res.status(200).json({ data })
   } catch (error) {
     console.error(error)
