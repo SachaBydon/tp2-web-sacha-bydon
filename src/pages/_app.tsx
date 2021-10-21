@@ -19,9 +19,8 @@ import Head from "next/head"
 
 //TODO: add eslint
 //TODO: add JSDoc
-//TODO: rework pagination (back + front URLs)
 //TODO: add #editing
-//TODO: add loading on filter change
+//TODO: add filters in url
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   const snackbarContext = initSnackbarContext()
   const assignmentsContext = initAssignmentsContext(snackbarContext)
