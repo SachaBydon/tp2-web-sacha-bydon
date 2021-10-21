@@ -15,7 +15,7 @@ export type AppContextType = {
   loading: boolean
   nbPages: number
   setNbPages: (id: number) => void
-  page: number
+  page: number | null
   setPage: (page: number) => void
 }
 
@@ -42,7 +42,7 @@ export const initAssignmentsContext = (
   const [filters, setFilters] = useState<Filter[] | null>(null)
   const [loading, setLoading] = useState(false)
   const [nbPages, setNbPages] = useState(1)
-  const [page, setPage] = useState(null)
+  const [page, setPage] = useState<number | null>(null)
   const { push } = snackbarContext
 
   function addAssignment(assignment: Assignment) {
