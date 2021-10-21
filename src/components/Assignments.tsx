@@ -27,7 +27,7 @@ export default function Assignments() {
   const defaultPage = router.query.page ? +router.query.page.toString() : 1
 
   useEffect(() => {
-    if (defaultPage) setPage(+defaultPage)
+    if (defaultPage !== 1) setPage(+defaultPage)
   }, [])
 
   function changeSelected(id: string | null) {
