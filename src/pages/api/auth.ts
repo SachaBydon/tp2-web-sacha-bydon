@@ -30,13 +30,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
 
-  // console.log('connecting ...')
   await dbConnect()
-  // console.log('connected')
-
   const user = new Credentials(req.body)
   const result = await Users.findOne(user)
-  // console.log('result: ' + result)
 
   const user_status: UserStatus = {
     value: result ? result.role : 'not_logged',
@@ -45,12 +41,8 @@ export default async function handler(
 }
 
 export async function login(user: ICredentials) {
-  // console.log('connecting ...')
   await dbConnect()
-  // console.log('connected')
-
   const result = await Users.findOne(user)
-  // console.log('result: ' + result)
 
   return {
     logged: result !== null,

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { AssignmentDetail, AddAssignment, AssignmentItem, Actions } from '@/components'
+import { AssignmentDetail, AssignmentItem, Actions } from '@/components'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { List, Pagination, IconButton } from '@mui/material'
@@ -7,52 +7,60 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import { useRouter } from 'next/router'
 import styles from '@/styles/Assignments.module.scss'
 import { destroyCookie } from 'nookies'
+import LoopIcon from '@mui/icons-material/Loop'
 
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 20
 
 export default function Assignments() {
   const router = useRouter()
 
   const titre: string = 'Assignments'
 
-  const { assignments } = useAssignmentsContext()
+  const { assignments, loading, nbPages, page, setPage } =
+    useAssignmentsContext()
   const { username } = useAuthContext()
   const defaultSelected = router.query.id ? router.query.id.toString() : null
   const [selectedId, setSelectedId] = useState<string | null>(defaultSelected)
   const [openModale, setOpenModale] = useState<boolean>(
     defaultSelected !== null
   )
-  const nbPages = Math.ceil(assignments.length / ITEMS_PER_PAGE)
-
-  const [filteredAssignments, setFilteredAssignments] = useState(
-    assignments.slice(0, ITEMS_PER_PAGE)
-  )
-  const [page, setPage] = useState(1)
+  const defaultPage = router.query.page ? +router.query.page.toString() : 1
 
   useEffect(() => {
-    const newAssignments = assignments.slice(
-      (page - 1) * ITEMS_PER_PAGE,
-      page * ITEMS_PER_PAGE
-    )
-    setFilteredAssignments(newAssignments)
-  }, [assignments, page])
+    if (defaultPage) setPage(+defaultPage)
+  }, [])
 
-  function changeSelected(id: string | undefined) {
-    if (id) {
-      setSelectedId(id)
-      setOpenModale(true)
-      window.history.pushState({ path: '/?id=' + id }, '', '/?id=' + id)
-    }
+  function changeSelected(id: string | null) {
+    setSelectedId(id)
+    setOpenModale(true)
   }
 
   function pageChanged(e: any, page: number) {
     if (page !== null) setPage(page)
   }
 
+  useEffect(() => {
+    updateUrl()
+  }, [page, selectedId])
+
+  function updateUrl() {
+    const url = new URL('http://localhost:3000/')
+
+    if (selectedId !== null) url.searchParams.append('id', selectedId)
+    if (page !== null) url.searchParams.append('page', page.toString())
+
+    const query =
+      url.searchParams.toString() !== ''
+        ? '/?' + url.searchParams.toString()
+        : '/'
+    window.history.pushState({ path: query }, '', query)
+  }
+
   return (
-    <div className={styles.Assignments}>
+    <div className={`${styles.Assignments} ${loading ? styles.loading : ''}`}>
       <AssignmentDetail
         assignmentId={selectedId}
+        setSelectedId={setSelectedId}
         open={openModale}
         setModal={setOpenModale}
       />
@@ -72,12 +80,18 @@ export default function Assignments() {
           </IconButton>
         </div>
       </div>
-      {/* <AddAssignment /> */}
       <Actions />
 
       <div className={styles.overlay} data-overlay>
+        <div
+          className={`rotate-animation-svg ${styles.loader} ${
+            loading ? '' : styles.hideLoading
+          }`}
+        >
+          <LoopIcon />
+        </div>
         <List className={styles.list}>
-          {filteredAssignments.map((assignment, index) => (
+          {assignments.map((assignment, index) => (
             <AssignmentItem
               key={index}
               assignment={assignment}
@@ -88,7 +102,11 @@ export default function Assignments() {
       </div>
 
       <div className={styles.pagination}>
-        <Pagination count={nbPages} onChange={pageChanged} />
+        <Pagination
+          count={nbPages}
+          onChange={pageChanged}
+          defaultPage={defaultPage}
+        />
       </div>
     </div>
   )

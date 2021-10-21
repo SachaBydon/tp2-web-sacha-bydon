@@ -13,7 +13,6 @@ export default function Filters() {
   const { setFilters, filters } = useAssignmentsContext()
   const [tri, setTri] = useState<Tri>(defaultTri())
   const [rendu, setRendu] = useState<Rendu>(defaultRendu())
-  console.log(filters)
 
   useEffect(() => {
     if (tri === defaultTri() && rendu === defaultRendu()) return
@@ -24,7 +23,6 @@ export default function Filters() {
     if (rendu === true) new_filters.push('rendu')
     if (rendu === false) new_filters.push('non-rendu')
 
-    console.log('ici: ' + new_filters)
     setFilters(new_filters)
   }, [tri, rendu])
 

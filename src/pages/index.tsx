@@ -11,6 +11,7 @@ export async function getServerSideProps(context: any) {
   user = user ? JSON.parse(user) : undefined
   const res: any = user === undefined ? { logged: false } : await login(user)
   let assignments: Assignment[] = []
+  let nbPages = 1
 
   if (!res.logged) {
     return {
@@ -20,7 +21,9 @@ export async function getServerSideProps(context: any) {
       },
     }
   } else {
-    assignments = await getAllAssignments()
+    const { data, nb_pages } = await getAllAssignments()
+    assignments = data
+    nbPages = nb_pages
   }
 
   return {
@@ -29,6 +32,7 @@ export async function getServerSideProps(context: any) {
       logged: res.logged,
       username: user?.username,
       assignments,
+      nbPages,
     },
   }
 }
@@ -38,16 +42,18 @@ type Props = {
   logged: boolean
   username: string
   assignments: Assignment[]
+  nbPages: number
 }
 
-export default function Home({ admin, logged, username, assignments }: Props) {
+export default function Home({ admin, logged, username, assignments, nbPages }: Props) {
   const { setAdmin, setLoggedIn, setUsername } = useAuthContext()
-  const { setAssignments } = useAssignmentsContext()
+  const { setAssignments, setNbPages } = useAssignmentsContext()
 
   useEffect(() => {
     setAdmin(admin)
     setLoggedIn(logged)
     setUsername(username)
+    setNbPages(nbPages)
     assignments.forEach((a) => (a.dateDeRendu = new Date(a.dateDeRendu)))
     setAssignments(assignments)
   }, [])

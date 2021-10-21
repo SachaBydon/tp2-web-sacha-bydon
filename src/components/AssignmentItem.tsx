@@ -22,7 +22,7 @@ import styles from '@/styles/AssignmentItem.module.scss'
 
 type Props = {
   assignment: Assignment
-  changeSelected: (i: string | undefined) => void
+  changeSelected: (i: string | null) => void
 }
 
 export default function AssignmentItem({ assignment, changeSelected }: Props) {

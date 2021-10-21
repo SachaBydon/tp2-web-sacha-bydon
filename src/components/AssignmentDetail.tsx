@@ -29,12 +29,14 @@ type Props = {
   assignmentId: string | null
   open: boolean
   setModal: (open: boolean) => void
+  setSelectedId: (assignmentId: string | null) => void
 }
 
 export default function AssignmentDetail({
   assignmentId,
   open,
   setModal,
+  setSelectedId
 }: Props) {
   const { assignments, updateAssignment } = useAssignmentsContext()
   const [assignment, setAssignment] = useState<Assignment | null>(null)
@@ -82,7 +84,7 @@ export default function AssignmentDetail({
   function handleClose() {
     setModal(false)
     setEditing(false)
-    window.history.pushState({ path: '/' }, '', '/')
+    setSelectedId(null)
   }
 
   return (

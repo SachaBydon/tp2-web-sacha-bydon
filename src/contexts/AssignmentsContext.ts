@@ -12,6 +12,11 @@ export type AppContextType = {
   setAssignments: (new_assignments: Assignment[]) => void
   updateAssignment: (i: string | null, formData: any) => void
   deleteAssignment: (id: string) => void
+  loading: boolean
+  nbPages: number
+  setNbPages: (id: number) => void
+  page: number
+  setPage: (page: number) => void
 }
 
 export const AssignmentsContext = createContext<AppContextType>({
@@ -22,6 +27,11 @@ export const AssignmentsContext = createContext<AppContextType>({
   setAssignments: () => {},
   updateAssignment: () => {},
   deleteAssignment: () => {},
+  loading: false,
+  nbPages: 1,
+  setNbPages: () => {},
+  page: 1,
+  setPage: () => {},
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
@@ -30,6 +40,9 @@ export const initAssignmentsContext = (
 ) => {
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [filters, setFilters] = useState<Filter[] | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [nbPages, setNbPages] = useState(1)
+  const [page, setPage] = useState(null)
   const { push } = snackbarContext
 
   function addAssignment(assignment: Assignment) {
@@ -135,7 +148,8 @@ export const initAssignmentsContext = (
   }
 
   useEffect(() => {
-    if (filters === null) return
+    if (filters === null && page === null) return
+    setLoading(true)
     const queries = generateFiltersQueries()
 
     fetch('/api/assignments' + queries, {
@@ -151,6 +165,7 @@ export const initAssignmentsContext = (
               a.dateDeRendu = new Date(a.dateDeRendu)
             })
             setAssignments(payload.data)
+            setNbPages(payload.nb_pages)
           } else {
             console.error(payload.message)
             push(`Erreur: ${payload.message}`, 'error')
@@ -161,20 +176,16 @@ export const initAssignmentsContext = (
         console.error(err)
         push(`Erreur: ${err}`, 'error')
       })
-  }, [filters])
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [filters, page])
 
   function generateFiltersQueries() {
-    if(filters === null) return
-    let queries = ''
-    if (filters.length > 0) {
-      queries += '?'
-      filters.forEach((filter, i) => {
-        queries += filter
-        if (i !== filters.length - 1) {
-          queries += '&'
-        }
-      })
-    }
+    let queries = `?page=${page}`
+    filters?.forEach((filter, i) => {
+      queries += '&' + filter
+    })
     return queries
   }
 
@@ -186,5 +197,10 @@ export const initAssignmentsContext = (
     updateAssignment,
     deleteAssignment,
     setFilters,
+    loading,
+    nbPages,
+    setNbPages,
+    page,
+    setPage,
   }
 }

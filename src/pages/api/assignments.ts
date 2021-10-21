@@ -4,20 +4,25 @@ import Assignments from '@/types/AssignmentModel'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import rawdata from './data'
 
+const PAGE_SIZE = 20
+
 export async function getAllAssignments() {
-  return new Promise<Assignment[]>(async (resolve) => {
+  return new Promise<{ data: Assignment[]; nb_pages: number }>(async (resolve) => {
     await dbConnect()
-    const result = await Assignments.find({})
-    resolve(
-      result.map((assignment) => {
+    const list = await Assignments.find({}).limit(PAGE_SIZE)
+    const count = await Assignments.count({})
+
+    resolve({
+      data: list.map((assignment) => {
         return {
           _id: assignment._id.toString(),
           nom: assignment.nom,
           dateDeRendu: assignment.dateDeRendu.toString(),
           rendu: assignment.rendu === 'true' ? true : false,
         }
-      })
-    )
+      }),
+      nb_pages: Math.ceil(count / PAGE_SIZE),
+    })
   })
 }
 
@@ -29,11 +34,16 @@ async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
   const sort: any = {}
   if (req.query['orderby-date'] !== undefined) sort.dateDeRendu = 1
   else if (req.query['orderby-alpha'] !== undefined) sort.nom = 1
-  console.log(sort)
+
+  const page = +req.query['page']
 
   try {
-    const result = await Assignments.find(query).sort(sort)
-    const data = result.map((assignment) => {
+    const list = await Assignments.find(query)
+      .sort(sort)
+      .skip((page - 1) * PAGE_SIZE)
+      .limit(PAGE_SIZE)
+    const count = await Assignments.count(query)
+    const data = list.map((assignment) => {
       return {
         _id: assignment._id.toString(),
         nom: assignment.nom,
@@ -41,7 +51,7 @@ async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
         rendu: assignment.rendu === 'true' ? true : false,
       }
     })
-    return res.status(200).json({ data })
+    return res.status(200).json({ data, nb_pages: Math.ceil(count / PAGE_SIZE) })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ message: 'Error fetching assignment', error })

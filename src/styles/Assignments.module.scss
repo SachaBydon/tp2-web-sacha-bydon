@@ -74,4 +74,20 @@
     justify-content: center;
     padding: 8px 0;
   }
+
+  
+}
+.loading {
+  pointer-events: none;
+  filter: opacity(0.5);
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.hideLoading{
+  display: none;
 }
