@@ -8,7 +8,11 @@ import {
   ListItemText,
   IconButton,
   Tooltip,
-  Popover,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
   Button,
 } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
@@ -65,23 +69,20 @@ export default function AssignmentItem({ assignment, changeSelected }: Props) {
           >
             <DeleteIcon />
           </IconButton>
-          <Popover
-            open={deleting}
-            anchorEl={deleteButtonRef.current}
-            onClose={() => setDeleting(false)}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-          >
-            <Button color="error" onClick={() => remove()}>
-              Supprimer ?
-            </Button>
-          </Popover>
+          <Dialog open={deleting} onClose={() => setDeleting(false)}>
+            <DialogTitle>Suppresion: {assignment.nom}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Êtes-vous sûr de vouloir supprimer cet assignment ?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setDeleting(false)}>Annuler</Button>
+              <Button onClick={() => remove()} color="error">
+                Supprimer
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       }
     >
