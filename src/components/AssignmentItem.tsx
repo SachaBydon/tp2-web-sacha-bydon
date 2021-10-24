@@ -70,10 +70,10 @@ export default function AssignmentItem({ assignment, changeSelected }: Props) {
             <DeleteIcon />
           </IconButton>
           <Dialog open={deleting} onClose={() => setDeleting(false)}>
-            <DialogTitle>Suppresion: {assignment.nom}</DialogTitle>
+            <DialogTitle>Suppression: {assignment.nom}</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Êtes-vous sûr de vouloir supprimer cet assignment ?
+                Êtes-vous sûr de vouloir supprimer cet assignement ?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
