@@ -44,10 +44,11 @@ export default function Assignments() {
   }, [page, selectedId])
 
   function updateUrl() {
-    const url = new URL('http://localhost:3000/')
+    const url = new URL(window.location.href)
 
-    if (selectedId !== null) url.searchParams.append('id', selectedId)
-    if (page !== null) url.searchParams.append('page', page.toString())
+    if (selectedId !== null) url.searchParams.set('id', selectedId)
+    else url.searchParams.delete('id')
+    if (page !== null && page != 1) url.searchParams.set('page', page.toString())
 
     const query =
       url.searchParams.toString() !== ''

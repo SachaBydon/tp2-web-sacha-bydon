@@ -7,13 +7,19 @@ import styles from '@/styles/Actions.module.scss'
 import { useState } from 'react'
 import { AddAssignment, Filters } from '@/components'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useRouter } from 'next/router'
 
 type Action = 'add' | 'filters' | 'none'
 
 export default function Action() {
-  const [action, setAction] = useState<Action>('none')
+  const router = useRouter()
+  const [action, setAction] = useState<Action>(getDefaultActions())
 
   const { admin } = useAuthContext()
+
+  function getDefaultActions() {
+    return router.query.orderby || router.query.rendu ? 'filters' : 'none'
+  }
 
   return (
     <div className={`${styles.Action} ${action}`}>

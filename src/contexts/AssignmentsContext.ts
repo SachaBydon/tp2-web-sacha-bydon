@@ -182,7 +182,7 @@ export const initAssignmentsContext = (
   }, [filters, page])
 
   function generateFiltersQueries() {
-    let queries = `?page=${page}`
+    let queries = `?page=${page ?? 1}`
     filters?.forEach((filter, i) => {
       queries += '&' + filter
     })

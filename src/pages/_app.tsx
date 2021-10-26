@@ -14,13 +14,10 @@ import {
   initSnackbarContext,
   SnackbarContext,
 } from '@/contexts/SnackbarContext'
-import Head from "next/head"
+import Head from 'next/head'
 
-
-//TODO: add eslint
 //TODO: add JSDoc
-//TODO: add #editing
-//TODO: add filters in url
+//TODO: améliorer le SSR pour l'application des queries
 export default function MyApp({ Component, pageProps, router }: AppProps) {
   const snackbarContext = initSnackbarContext()
   const assignmentsContext = initAssignmentsContext(snackbarContext)
