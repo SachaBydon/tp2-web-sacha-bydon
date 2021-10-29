@@ -1,41 +1,18 @@
 import { ButtonGroup, Button } from '@mui/material'
 import styles from '@/styles/Filters.module.scss'
 import CloseIcon from '@mui/icons-material/Close'
-import { useRouter } from 'next/router'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import Filter from '@/types/Filter'
 
 type Tri = 'date' | 'alpha' | null | undefined
 type Rendu = Boolean | null | undefined
 
-// TODO réparer
 export default function Filters() {
-  const router = useRouter()
   const { setFilters, filters } = useAssignmentsContext()
   const [tri, setTri] = useState<Tri>(defaultTri())
   const [rendu, setRendu] = useState<Rendu>(defaultRendu())
-
-  useEffect(() => {
-    
-    // console.log(tri);
-    // console.log(router.query.orderby);
-    
-    // if (tri === undefined && rendu == undefined) return
-    if (tri == router.query.orderby && rendu == router.query.rendu) return
-
-    console.log('changement');
-    const new_filters: Filter[] = []
-    if (tri === 'date') new_filters.push('orderby-date')
-    if (tri === 'alpha') new_filters.push('orderby-alpha')
-    if (rendu === true) new_filters.push('rendu')
-    if (rendu === false) new_filters.push('non-rendu')
-
-    setFilters(new_filters)
-    updateUrl(new_filters)
-  }, [tri, rendu])
-
 
   function updateUrl(filters: Filter[]) {
     const url = new URL(window.location.href)
@@ -67,44 +44,74 @@ export default function Filters() {
   }
 
   function defaultTri() {
-    if (filters === null) return undefined
-    // if (filters.includes('orderby-date')) return 'date'
-    // if (filters.includes('orderby-alpha')) return 'alpha'
-    console.log(router.query.orderby)
-    console.log(router.query.orderby?.toString())
-    return (router.query.orderby ?? undefined) as Tri
+    if (filters === null) return null
+    if (filters.includes('orderby-date')) return 'date'
+    if (filters.includes('orderby-alpha')) return 'alpha'
   }
 
   function defaultRendu() {
-    if (filters === null) return undefined
-    // if (filters.includes('rendu')) return true
-    // if (filters.includes('non-rendu')) return false
-    // console.log(router.query.rendu)
-    // console.log(router.query.rendu?.toString())
-    return (router.query.rendu?.toString() ?? undefined) as Rendu
+    if (filters === null) return null
+    if (filters.includes('rendu')) return true
+    if (filters.includes('non-rendu')) return false
+  }
+
+  function setFilterProperty(name: String, value: any) {
+    let new_tri = tri
+    let new_rendu = rendu
+    switch (name) {
+      case 'orderby':
+        setTri(value as Tri)
+        new_tri = value
+        break
+      case 'rendu':
+        setRendu(value as Rendu)
+        new_rendu = value
+        break
+    }
+
+    const new_filters: Filter[] = []
+    if (new_tri === 'date') new_filters.push('orderby-date')
+    if (new_tri === 'alpha') new_filters.push('orderby-alpha')
+    if (new_rendu === true) new_filters.push('rendu')
+    if (new_rendu === false) new_filters.push('non-rendu')
+
+    setFilters(new_filters)
+    updateUrl(new_filters)
   }
 
   return (
     <div className={styles.Filters}>
       <ButtonGroup variant="outlined" aria-label="outlined button group">
-        <Button data-active={tri === 'date'} onClick={() => setTri('date')}>
+        <Button
+          data-active={tri === 'date'}
+          onClick={() => setFilterProperty('orderby', 'date')}
+        >
           Tri par date
         </Button>
-        <Button data-active={tri === 'alpha'} onClick={() => setTri('alpha')}>
+        <Button
+          data-active={tri === 'alpha'}
+          onClick={() => setFilterProperty('orderby', 'alpha')}
+        >
           Tri par alpha
         </Button>
-        <Button data-close onClick={() => setTri(null)}>
+        <Button data-close onClick={() => setFilterProperty('orderby', null)}>
           <CloseIcon />
         </Button>
       </ButtonGroup>
       <ButtonGroup variant="outlined" aria-label="outlined button group">
-        <Button data-active={rendu === true} onClick={() => setRendu(true)}>
+        <Button
+          data-active={rendu === true}
+          onClick={() => setFilterProperty('rendu', true)}
+        >
           Rendu
         </Button>
-        <Button data-active={rendu === false} onClick={() => setRendu(false)}>
+        <Button
+          data-active={rendu === false}
+          onClick={() => setFilterProperty('rendu', false)}
+        >
           Non rendu
         </Button>
-        <Button data-close onClick={() => setRendu(null)}>
+        <Button data-close onClick={() => setFilterProperty('rendu', null)}>
           <CloseIcon />
         </Button>
       </ButtonGroup>

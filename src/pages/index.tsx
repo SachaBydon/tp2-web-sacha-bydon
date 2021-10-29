@@ -5,6 +5,7 @@ import { login } from '@/pages/api/auth'
 import { getAllAssignments } from '@/pages/api/assignments'
 import { useEffect } from 'react'
 import Assignment from '@/types/Assignment'
+import { useRouter } from 'next/router'
 
 export async function getServerSideProps(context: any) {
   let { user } = context.req.cookies
@@ -45,7 +46,13 @@ type Props = {
   nbPages: number
 }
 
-export default function Home({ admin, logged, username, assignments, nbPages }: Props) {
+export default function Home({
+  admin,
+  logged,
+  username,
+  assignments,
+  nbPages,
+}: Props) {
   const { setAdmin, setLoggedIn, setUsername } = useAuthContext()
   const { setAssignments, setNbPages } = useAssignmentsContext()
 
