@@ -30,8 +30,10 @@ export default function Action() {
     if (orderby === 'alpha') new_filters.push('orderby-alpha')
     if (rendu === 'true') new_filters.push('rendu')
     if (rendu === 'false') new_filters.push('non-rendu')
-    setFilters(new_filters)
-    if (new_filters.length !== 0) setAction('filters')
+    if (new_filters.length !== 0) {
+      setFilters(new_filters)
+      setAction('filters')
+    }
   }
 
   return (
