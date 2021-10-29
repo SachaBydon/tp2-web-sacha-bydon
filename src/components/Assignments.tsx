@@ -48,7 +48,10 @@ export default function Assignments() {
 
     if (selectedId !== null) url.searchParams.set('id', selectedId)
     else url.searchParams.delete('id')
-    if (page !== null && page != 1) url.searchParams.set('page', page.toString())
+    if (page !== null) {
+      if (page === 1) url.searchParams.delete('page')
+      else url.searchParams.set('page', page.toString())
+    }
 
     const query =
       url.searchParams.toString() !== ''
