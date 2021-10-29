@@ -16,25 +16,14 @@ type Action = 'add' | 'filters' | 'none'
 export default function Action() {
   const router = useRouter()
   const [action, setAction] = useState<Action>('none')
-  const { setFilters } = useAssignmentsContext()
+  const { filters } = useAssignmentsContext()
   const { admin } = useAuthContext()
 
   useEffect(() => {
-    initFilters()
-  }, [])
-
-  function initFilters() {
-    const new_filters: Filter[] = []
-    const { rendu, orderby } = router.query
-    if (orderby === 'date') new_filters.push('orderby-date')
-    if (orderby === 'alpha') new_filters.push('orderby-alpha')
-    if (rendu === 'true') new_filters.push('rendu')
-    if (rendu === 'false') new_filters.push('non-rendu')
-    if (new_filters.length !== 0) {
-      setFilters(new_filters)
+    if (filters.length !== 0) {
       setAction('filters')
     }
-  }
+  }, [])
 
   return (
     <div className={`${styles.Action} ${action}`}>

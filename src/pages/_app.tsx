@@ -9,18 +9,18 @@ import {
 import { AuthContext, initAuthContext } from '@/contexts/AuthContext'
 import { createTheme } from '@mui/material/styles'
 import { ThemeProvider } from '@mui/material'
-import { CustomRoutes } from '@/components'
 import {
   initSnackbarContext,
   SnackbarContext,
 } from '@/contexts/SnackbarContext'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 //TODO: add JSDoc
-//TODO: améliorer le SSR pour l'application des queries
-export default function MyApp({ Component, pageProps, router }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter()
   const snackbarContext = initSnackbarContext()
-  const assignmentsContext = initAssignmentsContext(snackbarContext)
+  const assignmentsContext = initAssignmentsContext(snackbarContext, router)
   const authContext = initAuthContext()
   const darkTheme = createTheme({ palette: { mode: 'dark' } })
 
@@ -49,8 +49,6 @@ export default function MyApp({ Component, pageProps, router }: AppProps) {
               <title>Assignments</title>
             </Head>
             <Component {...pageProps} />
-            {/* <CustomRoutes router={router}>
-            </CustomRoutes> */}
           </ThemeProvider>
         </AuthContext.Provider>
       </AssignmentsContext.Provider>

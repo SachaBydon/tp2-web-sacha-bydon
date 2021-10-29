@@ -6,24 +6,37 @@ import rawdata from './data'
 
 const PAGE_SIZE = 20
 
-export async function getAllAssignments() {
-  return new Promise<{ data: Assignment[]; nb_pages: number }>(async (resolve) => {
-    await dbConnect()
-    const list = await Assignments.find({}).limit(PAGE_SIZE)
-    const count = await Assignments.count({})
+export async function getAllAssignments(query_data: any) {
+  return new Promise<{ data: Assignment[]; nb_pages: number }>(
+    async (resolve) => {
+      const page = query_data.page ? +query_data.page : 1
 
-    resolve({
-      data: list.map((assignment) => {
-        return {
-          _id: assignment._id.toString(),
-          nom: assignment.nom,
-          dateDeRendu: assignment.dateDeRendu.toString(),
-          rendu: assignment.rendu === 'true' ? true : false,
-        }
-      }),
-      nb_pages: Math.ceil(count / PAGE_SIZE),
-    })
-  })
+      let query: any = {}
+      if (query_data.rendu) query.rendu = query_data.rendu
+      let sort: any = {}
+      if (query_data.orderby === 'alpha') sort.nom = 1
+      else if (query_data.orderby === 'date') sort.dateDeRendu = 1
+
+      await dbConnect()
+      const list = await Assignments.find(query)
+        .sort(sort)
+        .skip((page - 1) * PAGE_SIZE)
+        .limit(PAGE_SIZE)
+      const count = await Assignments.count(query)
+
+      resolve({
+        data: list.map((assignment) => {
+          return {
+            _id: assignment._id.toString(),
+            nom: assignment.nom,
+            dateDeRendu: assignment.dateDeRendu.toString(),
+            rendu: assignment.rendu === 'true' ? true : false,
+          }
+        }),
+        nb_pages: Math.ceil(count / PAGE_SIZE),
+      })
+    }
+  )
 }
 
 async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
@@ -36,6 +49,9 @@ async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
   else if (req.query['orderby-alpha'] !== undefined) sort.nom = 1
 
   const page = +req.query['page']
+  console.log(query)
+  console.log(sort)
+  console.log(page)
 
   try {
     const list = await Assignments.find(query)
@@ -51,7 +67,9 @@ async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
         rendu: assignment.rendu === 'true' ? true : false,
       }
     })
-    return res.status(200).json({ data, nb_pages: Math.ceil(count / PAGE_SIZE) })
+    return res
+      .status(200)
+      .json({ data, nb_pages: Math.ceil(count / PAGE_SIZE) })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ message: 'Error fetching assignment', error })

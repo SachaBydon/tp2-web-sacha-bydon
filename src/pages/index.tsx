@@ -5,7 +5,6 @@ import { login } from '@/pages/api/auth'
 import { getAllAssignments } from '@/pages/api/assignments'
 import { useEffect } from 'react'
 import Assignment from '@/types/Assignment'
-import { useRouter } from 'next/router'
 
 export async function getServerSideProps(context: any) {
   let { user } = context.req.cookies
@@ -22,7 +21,7 @@ export async function getServerSideProps(context: any) {
       },
     }
   } else {
-    const { data, nb_pages } = await getAllAssignments()
+    const { data, nb_pages } = await getAllAssignments(context.query)
     assignments = data
     nbPages = nb_pages
   }

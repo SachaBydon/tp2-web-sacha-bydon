@@ -6,8 +6,8 @@ import { SnackbarContextType } from './SnackbarContext'
 
 export type AppContextType = {
   assignments: Assignment[]
-  filters: Filter[] | null
-  setFilters: (filters: Filter[] | null) => void
+  filters: Filter[]
+  setFilters: (filters: Filter[]) => void
   addAssignment: (assignment: Assignment) => void
   setAssignments: (new_assignments: Assignment[]) => void
   updateAssignment: (i: string | null, formData: any) => void
@@ -36,13 +36,15 @@ export const AssignmentsContext = createContext<AppContextType>({
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
 export const initAssignmentsContext = (
-  snackbarContext: SnackbarContextType
+  snackbarContext: SnackbarContextType,
+  router: any
 ) => {
+  const [firstloaded, setFirstloaded] = useState<boolean>(false)
   const [assignments, setAssignments] = useState<Assignment[]>([])
-  const [filters, setFilters] = useState<Filter[] | null>(null)
+  const [filters, setFilters] = useState<Filter[]>(getInitialFilters())
   const [loading, setLoading] = useState(false)
   const [nbPages, setNbPages] = useState(1)
-  const [page, setPage] = useState<number | null>(null)
+  const [page, setPage] = useState<number>(getInitialPage())
   const { push } = snackbarContext
 
   function addAssignment(assignment: Assignment) {
@@ -148,7 +150,11 @@ export const initAssignmentsContext = (
   }
 
   useEffect(() => {
-    if (filters === null && page === null) return
+    if (!firstloaded) {
+      setFirstloaded(true)
+      return
+    }
+    console.log('update')
     setLoading(true)
     const queries = generateFiltersQueries()
 
@@ -181,9 +187,24 @@ export const initAssignmentsContext = (
       })
   }, [filters, page])
 
+  function getInitialFilters() {
+    const default_filters: Filter[] = []
+    const { rendu, orderby } = router.query
+    if (orderby === 'date') default_filters.push('orderby-date')
+    if (orderby === 'alpha') default_filters.push('orderby-alpha')
+    if (rendu === 'true') default_filters.push('rendu')
+    if (rendu === 'false') default_filters.push('non-rendu')
+    return default_filters
+  }
+
+  function getInitialPage() {
+    const { page } = router.query
+    return page ? +page : 1
+  }
+
   function generateFiltersQueries() {
     let queries = `?page=${page ?? 1}`
-    filters?.forEach((filter, i) => {
+    filters.forEach((filter, i) => {
       queries += '&' + filter
     })
     return queries

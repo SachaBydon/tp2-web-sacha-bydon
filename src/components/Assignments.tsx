@@ -9,8 +9,6 @@ import styles from '@/styles/Assignments.module.scss'
 import { destroyCookie } from 'nookies'
 import LoopIcon from '@mui/icons-material/Loop'
 
-const ITEMS_PER_PAGE = 20
-
 export default function Assignments() {
   const router = useRouter()
 
@@ -25,10 +23,6 @@ export default function Assignments() {
     defaultSelected !== null
   )
   const defaultPage = router.query.page ? +router.query.page.toString() : 1
-
-  useEffect(() => {
-    if (defaultPage !== 1) setPage(+defaultPage)
-  }, [])
 
   function changeSelected(id: string | null) {
     setSelectedId(id)

@@ -14,12 +14,12 @@ export default function Filters() {
   const [tri, setTri] = useState<Tri>(defaultTri())
   const [rendu, setRendu] = useState<Rendu>(defaultRendu())
 
-  function updateUrl(filters: Filter[]) {
+  function updateUrl(new_filters: Filter[]) {
     const url = new URL(window.location.href)
     url.searchParams.delete('rendu')
     url.searchParams.delete('orderby')
 
-    for (let filter of filters) {
+    for (let filter of new_filters) {
       switch (filter) {
         case 'non-rendu':
           url.searchParams.set('rendu', 'false')
@@ -34,13 +34,13 @@ export default function Filters() {
           url.searchParams.set('orderby', 'date')
           break
       }
-
-      const query =
-        url.searchParams.toString() !== ''
-          ? '/?' + url.searchParams.toString()
-          : '/'
-      window.history.pushState({ path: query }, '', query)
     }
+    const query =
+      url.searchParams.toString() !== ''
+        ? '/?' + url.searchParams.toString()
+        : '/'
+
+    window.history.pushState({ path: query }, '', query)
   }
 
   function defaultTri() {
