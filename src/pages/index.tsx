@@ -7,12 +7,15 @@ import { useEffect } from 'react'
 import Assignment from '@/types/Assignment'
 
 export async function getServerSideProps(context: any) {
+  // Get the user from the cookie
   let { user } = context.req.cookies
   user = user ? JSON.parse(user) : undefined
   const res: any = user === undefined ? { logged: false } : await login(user)
+
   let assignments: Assignment[] = []
   let nbPages = 1
 
+  // If the user is not logged in, redirect to the login page
   if (!res.logged) {
     return {
       redirect: {
@@ -20,12 +23,15 @@ export async function getServerSideProps(context: any) {
         permanent: false,
       },
     }
-  } else {
+  }
+  // If the user is logged in, get the assignments
+  else {
     const { data, nb_pages } = await getAllAssignments(context.query)
     assignments = data
     nbPages = nb_pages
   }
 
+  // Return the props to the page component
   return {
     props: {
       admin: res.admin,
@@ -52,9 +58,11 @@ export default function Home({
   assignments,
   nbPages,
 }: Props) {
+  // Get the contexts
   const { setAdmin, setLoggedIn, setUsername } = useAuthContext()
   const { setAssignments, setNbPages } = useAssignmentsContext()
 
+  // Set the default data in the contexts
   useEffect(() => {
     setAdmin(admin)
     setLoggedIn(logged)

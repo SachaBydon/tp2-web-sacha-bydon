@@ -4,7 +4,7 @@ import Filter from '@/types/Filter'
 import { useState, useEffect } from 'react'
 import { SnackbarContextType } from './SnackbarContext'
 
-export type AppContextType = {
+export type AssignmentsContextType = {
   assignments: Assignment[]
   filters: Filter[]
   setFilters: (filters: Filter[]) => void
@@ -19,19 +19,19 @@ export type AppContextType = {
   setPage: (page: number) => void
 }
 
-export const AssignmentsContext = createContext<AppContextType>({
+export const AssignmentsContext = createContext<AssignmentsContextType>({
   assignments: [],
   filters: [],
-  setFilters: () => {},
-  addAssignment: () => {},
-  setAssignments: () => {},
-  updateAssignment: () => {},
-  deleteAssignment: () => {},
+  setFilters: () => { },
+  addAssignment: () => { },
+  setAssignments: () => { },
+  updateAssignment: () => { },
+  deleteAssignment: () => { },
   loading: false,
   nbPages: 1,
-  setNbPages: () => {},
+  setNbPages: () => { },
   page: 1,
-  setPage: () => {},
+  setPage: () => { },
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 

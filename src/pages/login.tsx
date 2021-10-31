@@ -15,12 +15,13 @@ import Router from 'next/router'
 import { login } from '@/pages/api/auth'
 import styles from '@/styles/Login.module.scss'
 
-
 export async function getServerSideProps(context: any) {
+  // Get the user from the cookie
   let { user } = context.req.cookies
   user = user ? JSON.parse(user) : undefined
   const res: any = user === undefined ? { logged: false } : await login(user)
 
+  // If the user is logged in, redirect to the home page
   if (res.logged) {
     return {
       redirect: {
@@ -34,6 +35,7 @@ export async function getServerSideProps(context: any) {
 }
 
 export default function Login() {
+  // Initialize the form and the state
   const defaultForm = { username: '', password: '' }
   const { formValues, updateForm } = useForm(defaultForm, onFormChange)
   const [loading, setLoading] = useState(false)
@@ -41,23 +43,31 @@ export default function Login() {
   const { login } = useAuthContext()
   const firstInputRef = useRef<HTMLInputElement>(null)
 
+  // Clear the error message when the form is changed
   function onFormChange() {
     setError('')
   }
 
+  // Set the focus on the first input when the page is loaded
   useEffect(() => {
     firstInputRef.current?.focus()
   }, [firstInputRef.current])
 
+  // Handle the login button click
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     console.log(formValues)
     setLoading(true)
 
+    // Try to login
     const authResult: any = await login(formValues)
+
+    // If the login was successful, redirect to the home page
     if (authResult.valid) {
       Router.push('/')
-    } else {
+    }
+    // If the login was not successful, display an error message
+    else {
       setError('Identifiant ou mot de passe incorect')
       setLoading(false)
     }

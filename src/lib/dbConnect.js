@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 
+// Mongo uri in .env
 const MONGODB_URI = process.env.MONGODB_URI
 
 if (!MONGODB_URI) {
@@ -8,17 +9,12 @@ if (!MONGODB_URI) {
   )
 }
 
-/**
- * Global is used here to maintain a cached connection across hot reloads
- * in development. This prevents connections growing exponentially
- * during API Route usage.
- */
 let cached = global.mongoose
-
 if (!cached) {
   cached = global.mongoose = { conn: null, promise: null }
 }
 
+// Connection to mongo database
 async function dbConnect() {
   if (cached.conn) {
     return cached.conn

@@ -16,12 +16,15 @@ import {
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-//TODO: add JSDoc
+// TODO: add doc
 export default function MyApp({ Component, pageProps }: AppProps) {
+  //Initialize contexts
   const router = useRouter()
   const snackbarContext = initSnackbarContext()
   const assignmentsContext = initAssignmentsContext(snackbarContext, router)
   const authContext = initAuthContext()
+
+  //Initialize MUI dark theme
   const darkTheme = createTheme({ palette: { mode: 'dark' } })
 
   return (
