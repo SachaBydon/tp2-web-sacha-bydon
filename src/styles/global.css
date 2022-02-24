@@ -78,24 +78,21 @@ body {
   }
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-}
+} */
 
-/* Track */
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
+  background: hsl(210, 100%, 20%);
+  border-radius: 99px;
+} */
+
+/* ::-webkit-scrollbar-thumb {
   background: hsl(210, 100%, 20%);
   border-radius: 99px;
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: hsl(210, 100%, 30%);
-  border-radius: 99px;
-}
-
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(210, 100%, 35%);
-}
+  background: hsl(210, 100%, 25%);
+} */

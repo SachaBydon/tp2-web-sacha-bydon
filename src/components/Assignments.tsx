@@ -1,20 +1,33 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { AssignmentDetail, AssignmentItem, Actions } from '@/components'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { List, Pagination, IconButton } from '@mui/material'
+import { List, Pagination, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, DialogContentText } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout'
 import { useRouter } from 'next/router'
 import styles from '@/styles/Assignments.module.scss'
 import { destroyCookie } from 'nookies'
-import LoopIcon from '@mui/icons-material/Loop'
+import {
+  DataGrid,
+  GridCallbackDetails,
+  GridColDef,
+  GridValueGetterParams,
+} from '@mui/x-data-grid'
+
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import DeleteIcon from '@mui/icons-material/Delete'
+import Assignment from '@/types/Assignment'
+
+
+
+
 
 export default function Assignments() {
   const router = useRouter()
 
   const titre: string = 'Assignments'
 
-  const { assignments, loading, nbPages, page, setPage } =
+  const { assignments, loading, nbPages, page, setPage, deleteAssignment } =
     useAssignmentsContext()
   const { username } = useAuthContext()
   const defaultSelected = router.query.id ? router.query.id.toString() : null
@@ -22,16 +35,69 @@ export default function Assignments() {
   const [openModale, setOpenModale] = useState<boolean>(
     defaultSelected !== null
   )
-  const defaultPage = router.query.page ? +router.query.page.toString() : 1
+  const [deleting, setDeleting] = useState(false)
+  const [deletingAssignment, setDeletingAssignment] = useState<Assignment|null>(null)
+
+
 
   function changeSelected(id: string | null) {
     setSelectedId(id)
     setOpenModale(true)
   }
 
-  function pageChanged(e: any, page: number) {
-    if (page !== null) setPage(page)
+  function viewBtn(props: any) {
+  
+    return (
+      <div style={{ display: 'flex', gap: 16, paddingRight: 16 }}>
+        <IconButton edge="end" aria-label="edit" onClick={() => changeSelected(props.id)}>
+          <VisibilityIcon />
+        </IconButton>
+        <IconButton edge="end" aria-label="delete" onClick={() => {
+          const a = assignments.find(a => a._id === props.id)
+          if (a) {
+            setDeletingAssignment(a)
+            setDeleting(true)
+          }
+        }}>
+          <DeleteIcon />
+        </IconButton>
+      </div>
+    )
   }
+
+  const columns: GridColDef[] = [
+    {
+      field: 'nom',
+      headerName: 'Nom',
+      width: 200,
+      disableColumnMenu: true,
+    },
+    {
+      field: 'dateDeRendu',
+      headerName: 'Date de rendu',
+      type: 'date',
+      width: 150,
+      disableColumnMenu: true,
+    },
+    {
+      field: 'rendu',
+      headerName: 'Rendu',
+      type: 'boolean',
+      width: 75,
+      headerAlign: 'left',
+      disableColumnMenu: true,
+      sortable: false,
+    },
+    {
+      field: 'actions',
+      headerName: '',
+      renderCell: viewBtn,
+      hideSortIcons: true,
+      disableColumnMenu: true,
+      flex: 1,
+      align: 'right',
+    },
+  ]
 
   useEffect(() => {
     updateUrl()
@@ -43,7 +109,7 @@ export default function Assignments() {
     if (selectedId !== null) url.searchParams.set('id', selectedId)
     else url.searchParams.delete('id')
     if (page !== null) {
-      if (page === 1) url.searchParams.delete('page')
+      if (page === 0) url.searchParams.delete('page')
       else url.searchParams.set('page', page.toString())
     }
 
@@ -53,6 +119,18 @@ export default function Assignments() {
         : '/'
     window.history.pushState({ path: query }, '', query)
   }
+
+  async function remove() {
+    if (deletingAssignment?._id) {
+      console.log('loading ...')
+      setDeleting(false)
+      await deleteAssignment(deletingAssignment._id)
+      console.log('deleted !!!')
+      setDeleting(false)
+      setDeletingAssignment(null)
+    }
+  }
+
 
   return (
     <div className={`${styles.Assignments} ${loading ? styles.loading : ''}`}>
@@ -81,14 +159,7 @@ export default function Assignments() {
       <Actions />
 
       <div className={styles.overlay} data-overlay>
-        <div
-          className={`rotate-animation-svg ${styles.loader} ${
-            loading ? '' : styles.hideLoading
-          }`}
-        >
-          <LoopIcon />
-        </div>
-        <List className={styles.list}>
+        {/* <List className={styles.list}>
           {assignments.map((assignment, index) => (
             <AssignmentItem
               key={index}
@@ -96,16 +167,56 @@ export default function Assignments() {
               changeSelected={changeSelected}
             />
           ))}
-        </List>
+        </List> */}
+        <div style={{ height: 'calc(100vh - 260px)', width: '100%' }}>
+          <DataGrid
+            rows={assignments}
+            columns={columns}
+            page={assignments.length ? page : 0}
+            initialState={{
+              pagination: {
+                pageSize: 20,
+              },
+            }}
+            rowCount={nbPages * 20}
+            rowsPerPageOptions={[20]}
+            disableSelectionOnClick
+            sx={{
+              '.MuiDataGrid-cell, .MuiDataGrid-columnHeader': {
+                outline: 'none!important',
+              },
+              '.MuiDataGrid-booleanCell[data-value="true"]': {
+                color: 'green!important',
+              },
+              '.MuiDataGrid-booleanCell[data-value="false"]': {
+                color: 'red!important',
+              },
+              'div:last-child > .MuiDataGrid-columnSeparator': {
+                display: 'none',
+              },
+            }}
+            getRowId={(a) => a._id}
+            paginationMode="server"
+            onPageChange={(p: number, details: GridCallbackDetails) => setPage(p)}
+            loading={loading}
+          />
+        </div>
       </div>
 
-      <div className={styles.pagination}>
-        <Pagination
-          count={nbPages}
-          onChange={pageChanged}
-          defaultPage={defaultPage}
-        />
-      </div>
+      <Dialog open={deleting} onClose={() => setDeleting(false)}>
+            <DialogTitle>Suppression: {deletingAssignment?.nom}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Êtes-vous sûr de vouloir supprimer cet assignement ?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setDeleting(false)}>Annuler</Button>
+              <Button onClick={() => remove()} color="error">
+                Supprimer
+              </Button>
+            </DialogActions>
+          </Dialog>
     </div>
   )
 }

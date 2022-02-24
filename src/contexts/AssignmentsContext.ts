@@ -15,7 +15,7 @@ export type AssignmentsContextType = {
   loading: boolean
   nbPages: number
   setNbPages: (id: number) => void
-  page: number | null
+  page: number
   setPage: (page: number) => void
 }
 
@@ -28,7 +28,7 @@ export const AssignmentsContext = createContext<AssignmentsContextType>({
   updateAssignment: () => { },
   deleteAssignment: () => { },
   loading: false,
-  nbPages: 1,
+  nbPages: 0,
   setNbPages: () => { },
   page: 1,
   setPage: () => { },
@@ -199,11 +199,11 @@ export const initAssignmentsContext = (
 
   function getInitialPage() {
     const { page } = router.query
-    return page ? +page : 1
+    return page ? +page : 0
   }
 
   function generateFiltersQueries() {
-    let queries = `?page=${page ?? 1}`
+    let queries = `?page=${(page) ?? 0}`
     filters.forEach((filter, i) => {
       queries += '&' + filter
     })

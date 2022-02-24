@@ -140,7 +140,7 @@ export async function addALotOffAssignments() {
 
 // SSR: Get all assignments by page and filters
 export async function getAllAssignments(query_data: any) {
-  const page = query_data.page ? +query_data.page : 1
+  const page = query_data.page ? +query_data.page : 0
 
   let query: any = {}
   if (query_data.rendu) query.rendu = query_data.rendu
@@ -158,7 +158,7 @@ function getAssignmentsByFilters(query: any, sort: any, page: number) {
       // Get all assignments
       const list = await Assignments.find(query)
         .sort(sort)
-        .skip((page - 1) * PAGE_SIZE)
+        .skip((page) * PAGE_SIZE)
         .limit(PAGE_SIZE)
       const count = await Assignments.count(query)
 

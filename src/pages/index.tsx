@@ -27,8 +27,8 @@ export async function getServerSideProps(context: any) {
   // If the user is logged in, get the assignments
   else {
     const { data, nb_pages } = await getAllAssignments(context.query)
-    assignments = data
-    nbPages = nb_pages
+    assignments = data as Assignment[]
+    nbPages = nb_pages as number
   }
 
   // Return the props to the page component
