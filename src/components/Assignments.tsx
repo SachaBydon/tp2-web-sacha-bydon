@@ -2,7 +2,19 @@ import { useState, useEffect, useMemo } from 'react'
 import { AssignmentDetail, AssignmentItem, Actions } from '@/components'
 import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import { useAuthContext } from '@/contexts/AuthContext'
-import { List, Pagination, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, DialogContentText } from '@mui/material'
+import {
+  List,
+  Pagination,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  DialogContentText,
+  TextField,
+  InputAdornment,
+} from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout'
 import { useRouter } from 'next/router'
 import styles from '@/styles/Assignments.module.scss'
@@ -11,16 +23,16 @@ import {
   DataGrid,
   GridCallbackDetails,
   GridColDef,
+  GridFilterModel,
+  GridSortModel,
   GridValueGetterParams,
 } from '@mui/x-data-grid'
 
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import DeleteIcon from '@mui/icons-material/Delete'
+import Search from '@mui/icons-material/Search'
 import Assignment from '@/types/Assignment'
-
-
-
-
+import FilterAlt from '@mui/icons-material/FilterAlt'
 
 export default function Assignments() {
   const router = useRouter()
@@ -36,9 +48,8 @@ export default function Assignments() {
     defaultSelected !== null
   )
   const [deleting, setDeleting] = useState(false)
-  const [deletingAssignment, setDeletingAssignment] = useState<Assignment|null>(null)
-
-
+  const [deletingAssignment, setDeletingAssignment] =
+    useState<Assignment | null>(null)
 
   function changeSelected(id: string | null) {
     setSelectedId(id)
@@ -46,19 +57,26 @@ export default function Assignments() {
   }
 
   function viewBtn(props: any) {
-  
     return (
       <div style={{ display: 'flex', gap: 16, paddingRight: 16 }}>
-        <IconButton edge="end" aria-label="edit" onClick={() => changeSelected(props.id)}>
+        <IconButton
+          edge="end"
+          aria-label="edit"
+          onClick={() => changeSelected(props.id)}
+        >
           <VisibilityIcon />
         </IconButton>
-        <IconButton edge="end" aria-label="delete" onClick={() => {
-          const a = assignments.find(a => a._id === props.id)
-          if (a) {
-            setDeletingAssignment(a)
-            setDeleting(true)
-          }
-        }}>
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          onClick={() => {
+            const a = assignments.find((a) => a._id === props.id)
+            if (a) {
+              setDeletingAssignment(a)
+              setDeleting(true)
+            }
+          }}
+        >
           <DeleteIcon />
         </IconButton>
       </div>
@@ -78,6 +96,8 @@ export default function Assignments() {
       type: 'date',
       width: 150,
       disableColumnMenu: true,
+      align: 'center',
+      headerAlign: 'center',
     },
     {
       field: 'rendu',
@@ -131,6 +151,15 @@ export default function Assignments() {
     }
   }
 
+  function filterChange(model: GridFilterModel) {
+    console.log(model)
+  }
+
+  const [sortModel, setSortModel] = useState<GridSortModel>([])
+
+  useEffect(() => {
+    console.log(sortModel)
+  }, [sortModel])
 
   return (
     <div className={`${styles.Assignments} ${loading ? styles.loading : ''}`}>
@@ -168,7 +197,24 @@ export default function Assignments() {
             />
           ))}
         </List> */}
-        <div style={{ height: 'calc(100vh - 260px)', width: '100%' }}>
+        <TextField
+          label="Recherche"
+          variant="filled"
+          fullWidth
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                  <IconButton>
+                    <FilterAlt />
+                  </IconButton>
+                  <Search />
+                </div>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <div style={{ height: 'calc(100vh - 280px)', width: '100%' }}>
           <DataGrid
             rows={assignments}
             columns={columns}
@@ -182,6 +228,8 @@ export default function Assignments() {
             rowsPerPageOptions={[20]}
             disableSelectionOnClick
             sx={{
+              backgroundColor: 'rgba(255, 255, 255, 0.09)',
+              border: 'none',
               '.MuiDataGrid-cell, .MuiDataGrid-columnHeader': {
                 outline: 'none!important',
               },
@@ -194,29 +242,46 @@ export default function Assignments() {
               'div:last-child > .MuiDataGrid-columnSeparator': {
                 display: 'none',
               },
+              '.MuiDataGrid-footerContainer': {
+                borderTop: '1px solid rgba(81, 81, 81, 1)',
+              },
+              '.MuiDataGrid-row:last-child > DIV': {
+                border: 'none',
+              },
+              '.MuiDataGrid-columnHeaders': {
+                userSelect: 'none',
+              },
             }}
             getRowId={(a) => a._id}
             paginationMode="server"
-            onPageChange={(p: number, details: GridCallbackDetails) => setPage(p)}
+            filterMode="server"
+            sortingMode="server"
+            sortModel={sortModel}
+            onSortModelChange={(model: GridSortModel) => setSortModel(model)}
+            onFilterModelChange={(model: GridFilterModel) =>
+              filterChange(model)
+            }
+            onPageChange={(p: number) => setPage(p)}
             loading={loading}
+            
           />
         </div>
       </div>
 
       <Dialog open={deleting} onClose={() => setDeleting(false)}>
-            <DialogTitle>Suppression: {deletingAssignment?.nom}</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Êtes-vous sûr de vouloir supprimer cet assignement ?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setDeleting(false)}>Annuler</Button>
-              <Button onClick={() => remove()} color="error">
-                Supprimer
-              </Button>
-            </DialogActions>
-          </Dialog>
+        <DialogTitle>Suppression: {deletingAssignment?.nom}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Êtes-vous sûr de vouloir supprimer cet assignement ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleting(false)}>Annuler</Button>
+          <Button onClick={() => remove()} color="error">
+            Supprimer
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }

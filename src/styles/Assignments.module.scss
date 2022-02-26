@@ -74,12 +74,10 @@
     justify-content: center;
     padding: 8px 0;
   }
-
-  
 }
 .loading {
   pointer-events: none;
-  opacity: .5;
+  opacity: 0.5;
 }
 
 .loader {
@@ -88,6 +86,6 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.hideLoading{
+.hideLoading {
   display: none;
 }
