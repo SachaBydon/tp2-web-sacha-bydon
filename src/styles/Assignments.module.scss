@@ -46,23 +46,6 @@
     height: 100%;
 
 
-    // &::after {
-    //   content: '';
-    //   top: 0;
-    //   left: 0;
-    //   height: 100%;
-    //   position: absolute;
-    //   width: calc(100% - 8px);
-    //   background: linear-gradient(
-    //     0deg,
-    //     rgba(0, 30, 60, 1) 0%,
-    //     rgba(0, 0, 0, 0) 8%,
-    //     rgba(0, 0, 0, 0) 92%,
-    //     rgba(0, 30, 60, 1) 100%
-    //   );
-    //   pointer-events: none;
-    // }
-
     .list {
       max-height: inherit;
       overflow-y: auto;

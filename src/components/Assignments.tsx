@@ -1,52 +1,48 @@
-import { useState, useEffect, useMemo } from 'react'
-import { AssignmentDetail, AssignmentItem, Actions } from '@/components'
-import { useAssignmentsContext } from '@/contexts/AssignmentsContext'
-import { useAuthContext } from '@/contexts/AuthContext'
+import { useState, useEffect, ChangeEvent } from 'react'
+import { AssignmentDetail, Actions } from '@/components'
+import { Filter, useAssignmentsContext } from '@/contexts/AssignmentsContext'
 import {
-  List,
-  Pagination,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  DialogContentText,
   TextField,
   InputAdornment,
+  Select,
+  MenuItem,
+  FormControl,
+  Badge,
 } from '@mui/material'
-import LogoutIcon from '@mui/icons-material/Logout'
 import { useRouter } from 'next/router'
 import styles from '@/styles/Assignments.module.scss'
-import { destroyCookie } from 'nookies'
-import {
-  DataGrid,
-  GridCallbackDetails,
-  GridColDef,
-  GridFilterModel,
-  GridSortModel,
-  GridValueGetterParams,
-} from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridSortModel } from '@mui/x-data-grid'
 
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Search from '@mui/icons-material/Search'
 import Assignment from '@/types/Assignment'
 import FilterAlt from '@mui/icons-material/FilterAlt'
+import { Close } from '@mui/icons-material'
+import TopBar from './TopBar'
+import DeleteModal from './DeleteModal'
 
 export default function Assignments() {
   const router = useRouter()
 
-  const titre: string = 'Assignments'
+  const {
+    assignments,
+    loading,
+    nbPages,
+    page,
+    setPage,
+    deleteAssignment,
+    filters,
+    setFilters,
+  } = useAssignmentsContext()
 
-  const { assignments, loading, nbPages, page, setPage, deleteAssignment } =
-    useAssignmentsContext()
-  const { username } = useAuthContext()
-  const defaultSelected = router.query.id ? router.query.id.toString() : null
+  const defaultSelected = router.query.id?.toString() ?? null
   const [selectedId, setSelectedId] = useState<string | null>(defaultSelected)
   const [openModale, setOpenModale] = useState<boolean>(
     defaultSelected !== null
   )
+
   const [deleting, setDeleting] = useState(false)
   const [deletingAssignment, setDeletingAssignment] =
     useState<Assignment | null>(null)
@@ -119,19 +115,26 @@ export default function Assignments() {
     },
   ]
 
-  useEffect(() => {
-    updateUrl()
-  }, [page, selectedId])
+  function updateUrl(filters: Filter) {
 
-  function updateUrl() {
     const url = new URL(window.location.href)
+
+    if (filters.text.length) url.searchParams.set('text', filters.text)
+    else url.searchParams.delete('text')
+
+    if (filters.rendu !== 'none') url.searchParams.set('rendu', filters.rendu)
+    else url.searchParams.delete('rendu')
+
+    if (filters.sort.length) {
+      const { field, sort } = filters.sort[0]
+      url.searchParams.set('sort', `${field}-${sort}`)
+    } else url.searchParams.delete('sort')
+
+    if (page !== 0) url.searchParams.set('page', page.toString())
+    else url.searchParams.delete('page')
 
     if (selectedId !== null) url.searchParams.set('id', selectedId)
     else url.searchParams.delete('id')
-    if (page !== null) {
-      if (page === 0) url.searchParams.delete('page')
-      else url.searchParams.set('page', page.toString())
-    }
 
     const query =
       url.searchParams.toString() !== ''
@@ -151,15 +154,25 @@ export default function Assignments() {
     }
   }
 
-  function filterChange(model: GridFilterModel) {
-    console.log(model)
+  function onFiltersChange(filters: Filter) {
+    console.log('filters', filters)
+    updateUrl(filters)
   }
-
-  const [sortModel, setSortModel] = useState<GridSortModel>([])
-
   useEffect(() => {
-    console.log(sortModel)
-  }, [sortModel])
+    updateUrl(filters)
+  }, [page, selectedId])
+
+  const [filterOpen, setFilterOpen] = useState(false)
+
+  let handler: NodeJS.Timeout | null = null
+  function onDebounceSearchChange(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value
+    if (handler) clearTimeout(handler)
+    handler = setTimeout(() => {
+      setFilters({ ...filters, text: value })
+      onFiltersChange({ ...filters, text: value })
+    }, 800)
+  }
 
   return (
     <div className={`${styles.Assignments} ${loading ? styles.loading : ''}`}>
@@ -171,43 +184,74 @@ export default function Assignments() {
       />
 
       <div className={styles.head}>
-        <h1>{titre}</h1>
-        <div>
-          {username}
-          <IconButton
-            color="error"
-            onClick={() => {
-              destroyCookie(null, 'user')
-              location.reload()
-            }}
-          >
-            <LogoutIcon />
-          </IconButton>
-        </div>
+        <h1>Assignments</h1>
+        <TopBar />
       </div>
       <Actions />
 
       <div className={styles.overlay} data-overlay>
-        {/* <List className={styles.list}>
-          {assignments.map((assignment, index) => (
-            <AssignmentItem
-              key={index}
-              assignment={assignment}
-              changeSelected={changeSelected}
-            />
-          ))}
-        </List> */}
         <TextField
           label="Recherche"
           variant="filled"
           fullWidth
+          defaultValue={(router.query.text as string) ?? ''}
+          onChange={onDebounceSearchChange}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                  <IconButton>
-                    <FilterAlt />
+                  <IconButton onClick={() => setFilterOpen((b) => !b)}>
+                    <Badge
+                      color="primary"
+                      variant="dot"
+                      invisible={filters.rendu === 'none'}
+                    >
+                      <FilterAlt />
+                    </Badge>
                   </IconButton>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      height: '55px',
+                      // width: '200px',
+                      backgroundColor: 'rgb(43 65 92)',
+                      top: '56px',
+                      right: 0,
+                      display: filterOpen ? 'flex' : 'none',
+                      zIndex: 100,
+                      alignItems: 'center',
+                      padding: '8px',
+                    }}
+                  >
+                    <IconButton
+                      onClick={() => setFilterOpen(false)}
+                      sx={{ mr: '8px' }}
+                    >
+                      <Close />
+                    </IconButton>
+                    Rendu :
+                    <FormControl
+                      variant="standard"
+                      sx={{ ml: '8px', minWidth: 120 }}
+                    >
+                      <Select
+                        label="Age"
+                        value={filters.rendu}
+                        onChange={(e) => {
+                          const rendu = e.target.value as
+                            | 'none'
+                            | 'true'
+                            | 'false'
+                          setFilters({ ...filters, rendu })
+                          onFiltersChange({ ...filters, rendu })
+                        }}
+                      >
+                        <MenuItem value="none"> </MenuItem>
+                        <MenuItem value="true">Oui</MenuItem>
+                        <MenuItem value="false">Non</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
                   <Search />
                 </div>
               </InputAdornment>
@@ -245,7 +289,7 @@ export default function Assignments() {
               '.MuiDataGrid-footerContainer': {
                 borderTop: '1px solid rgba(81, 81, 81, 1)',
               },
-              '.MuiDataGrid-row:last-child > DIV': {
+              '.MuiDataGrid-row:last-child > div': {
                 border: 'none',
               },
               '.MuiDataGrid-columnHeaders': {
@@ -256,32 +300,23 @@ export default function Assignments() {
             paginationMode="server"
             filterMode="server"
             sortingMode="server"
-            sortModel={sortModel}
-            onSortModelChange={(model: GridSortModel) => setSortModel(model)}
-            onFilterModelChange={(model: GridFilterModel) =>
-              filterChange(model)
-            }
+            sortModel={filters.sort}
+            onSortModelChange={(model: GridSortModel) => {
+              setFilters({ ...filters, sort: model })
+              onFiltersChange({ ...filters, sort: model })
+            }}
             onPageChange={(p: number) => setPage(p)}
             loading={loading}
-            
           />
         </div>
       </div>
 
-      <Dialog open={deleting} onClose={() => setDeleting(false)}>
-        <DialogTitle>Suppression: {deletingAssignment?.nom}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Êtes-vous sûr de vouloir supprimer cet assignement ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleting(false)}>Annuler</Button>
-          <Button onClick={() => remove()} color="error">
-            Supprimer
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteModal
+        deleting={deleting}
+        setDeleting={setDeleting}
+        deletingAssignment={deletingAssignment}
+        remove={remove}
+      />
     </div>
   )
 }

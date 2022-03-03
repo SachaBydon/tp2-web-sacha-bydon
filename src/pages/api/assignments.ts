@@ -12,32 +12,21 @@ type ResultType = {
   message?: string
 }
 
-
 // Get all assignments by page and filters
 async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
 
-  // Set query filters
-  const query: any = {}
-  if (req.query['rendu'] !== undefined) query.rendu = true
-  else if (req.query['non-rendu'] !== undefined) query.rendu = false
-
-  // Set sorting options
-  const sort: any = {}
-  if (req.query['orderby-date'] !== undefined) sort.dateDeRendu = 1
-  else if (req.query['orderby-alpha'] !== undefined) sort.nom = 1
-
-  const page = +req.query['page']
+  const { query, sort, page } = getFormatedFilters(req.query)
 
   // Get the data
   const result: ResultType = await getAssignmentsByFilters(query, sort, page)
   if (result.error) {
     console.error(result.error)
-    return res.status(500).json({ message: result.message, error: result.error })
-  }
-  else {
+    return res
+      .status(500)
+      .json({ message: result.message, error: result.error })
+  } else {
     return res.status(200).json(result)
   }
-
 }
 
 // Create an assignment (req.body => Assignment type)
@@ -121,7 +110,6 @@ export default async function handler(
 
 // Add a lot of data to the database with the data.ts file
 export async function addALotOffAssignments() {
-
   // Database connection
   console.log('connecting ...')
   await dbConnect()
@@ -140,14 +128,7 @@ export async function addALotOffAssignments() {
 
 // SSR: Get all assignments by page and filters
 export async function getAllAssignments(query_data: any) {
-  const page = query_data.page ? +query_data.page : 0
-
-  let query: any = {}
-  if (query_data.rendu) query.rendu = query_data.rendu
-  let sort: any = {}
-  if (query_data.orderby === 'alpha') sort.nom = 1
-  else if (query_data.orderby === 'date') sort.dateDeRendu = 1
-
+  const { query, sort, page } = getFormatedFilters(query_data)
   await dbConnect()
   return await getAssignmentsByFilters(query, sort, page)
 }
@@ -158,7 +139,7 @@ function getAssignmentsByFilters(query: any, sort: any, page: number) {
       // Get all assignments
       const list = await Assignments.find(query)
         .sort(sort)
-        .skip((page) * PAGE_SIZE)
+        .skip(page * PAGE_SIZE)
         .limit(PAGE_SIZE)
       const count = await Assignments.count(query)
 
@@ -178,5 +159,24 @@ function getAssignmentsByFilters(query: any, sort: any, page: number) {
       resolve({ message: 'Error fetching assignment', error })
     }
   })
+}
 
+function getFormatedFilters(query_data: any) {
+  const page = query_data.page ? +query_data.page : 0
+
+  let query: any = {}
+  if (query_data.rendu !== undefined) {
+    if (query_data.rendu === 'true') query.rendu = true
+    if (query_data.rendu === 'false') query.rendu = false
+  }
+  if (query_data.text !== undefined) query.nom = {'$regex': query_data.text, '$options' : 'i' } 
+  let sort: any = {}
+  if (query_data.sort !== undefined) {
+    try {
+      const [field, sortDir] = query_data.sort.split('-')
+      sort[field] = sortDir === 'asc' ? 1 : -1
+    } catch (error) {}
+  }
+
+  return { query, sort, page }
 }

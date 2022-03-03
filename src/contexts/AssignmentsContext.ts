@@ -1,13 +1,18 @@
 import { createContext, useContext } from 'react'
 import Assignment from '@/types/Assignment'
-import Filter from '@/types/Filter'
 import { useState, useEffect } from 'react'
 import { SnackbarContextType } from './SnackbarContext'
+import { GridSortDirection, GridSortModel } from '@mui/x-data-grid'
 
+export type Filter = {
+  text: string
+  rendu: 'true' | 'false' | 'none'
+  sort: GridSortModel
+}
 export type AssignmentsContextType = {
   assignments: Assignment[]
-  filters: Filter[]
-  setFilters: (filters: Filter[]) => void
+  filters: Filter
+  setFilters: (filters: Filter) => void
   addAssignment: (assignment: Assignment) => void
   setAssignments: (new_assignments: Assignment[]) => void
   updateAssignment: (i: string | null, formData: any) => void
@@ -21,17 +26,17 @@ export type AssignmentsContextType = {
 
 export const AssignmentsContext = createContext<AssignmentsContextType>({
   assignments: [],
-  filters: [],
-  setFilters: () => { },
-  addAssignment: () => { },
-  setAssignments: () => { },
-  updateAssignment: () => { },
-  deleteAssignment: () => { },
+  filters: { text: '', rendu: 'none', sort: [] },
+  setFilters: () => {},
+  addAssignment: () => {},
+  setAssignments: () => {},
+  updateAssignment: () => {},
+  deleteAssignment: () => {},
   loading: false,
   nbPages: 0,
-  setNbPages: () => { },
+  setNbPages: () => {},
   page: 1,
-  setPage: () => { },
+  setPage: () => {},
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
@@ -41,7 +46,7 @@ export const initAssignmentsContext = (
 ) => {
   const [firstloaded, setFirstloaded] = useState<boolean>(false)
   const [assignments, setAssignments] = useState<Assignment[]>([])
-  const [filters, setFilters] = useState<Filter[]>(getInitialFilters())
+  const [filters, setFilters] = useState<Filter>(getInitialFilters())
   const [loading, setLoading] = useState(false)
   const [nbPages, setNbPages] = useState(1)
   const [page, setPage] = useState<number>(getInitialPage())
@@ -188,13 +193,31 @@ export const initAssignmentsContext = (
   }, [filters, page])
 
   function getInitialFilters() {
-    const default_filters: Filter[] = []
-    const { rendu, orderby } = router.query
-    if (orderby === 'date') default_filters.push('orderby-date')
-    if (orderby === 'alpha') default_filters.push('orderby-alpha')
-    if (rendu === 'true') default_filters.push('rendu')
-    if (rendu === 'false') default_filters.push('non-rendu')
-    return default_filters
+    const { text, rendu, sort: sort_tring } = router.query
+
+    let model: {
+      text: string
+      rendu: 'true' | 'false' | 'none'
+      sort: GridSortModel
+    } = {
+      text: '',
+      rendu: 'none',
+      sort: [],
+    }
+
+    if (text) model.text = text as string
+    if (rendu) model.rendu = rendu as 'none' | 'true' | 'false'
+    if (sort_tring) {
+      try {
+        let [field, sort] = (sort_tring as string).split('-')
+        model.sort.push({ field, sort } as {
+          field: string
+          sort: GridSortDirection
+        })
+      } catch (error) {}
+    }
+
+    return model
   }
 
   function getInitialPage() {
@@ -203,10 +226,13 @@ export const initAssignmentsContext = (
   }
 
   function generateFiltersQueries() {
-    let queries = `?page=${(page) ?? 0}`
-    filters.forEach((filter, i) => {
-      queries += '&' + filter
-    })
+    let queries = `?page=${page ?? 0}`
+    if(filters.text.length) queries += `&text=${filters.text}`
+    if(filters.rendu !== 'none') queries += `&rendu=${filters.rendu}`
+    if(filters.sort.length) {
+      const {field, sort} = filters.sort[0]
+      queries += `&sort=${field}-${sort}`
+    }
     return queries
   }
 
