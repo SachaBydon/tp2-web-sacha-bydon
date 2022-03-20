@@ -8,15 +8,14 @@ import Assignment from '@/types/Assignment'
 
 export async function getServerSideProps(context: any) {
   // Get the user from the cookie
-  let { user } = context.req.cookies
-  user = user ? JSON.parse(user) : undefined
-  const res: any = user === undefined ? { logged: false } : await login(user)
+  let { jwt } = context.req.cookies
+  const res: any = jwt === undefined ? { logged: false } : await login(jwt)
 
   let assignments: Assignment[] = []
   let nbPages = 1
 
   // If the user is not logged in, redirect to the login page
-  if (!res.logged) {
+  if (!jwt) {
     return {
       redirect: {
         destination: '/login',
@@ -36,7 +35,7 @@ export async function getServerSideProps(context: any) {
     props: {
       admin: res.admin,
       logged: res.logged,
-      username: user?.username,
+      username: res.username,
       assignments,
       nbPages,
     },

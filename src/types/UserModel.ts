@@ -10,3 +10,9 @@ const UserSchema = new mongoose.Schema({
 })
 
 export default mongoose.models.Users ?? mongoose.model('Users', UserSchema)
+
+export type User = {
+  username: string
+  password: string
+  role: 'user' | 'admin'
+}

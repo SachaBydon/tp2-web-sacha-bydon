@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import dbConnect from '@/lib/dbConnect'
-import Users from '@/types/UserModel'
+import Users, { User } from '@/types/UserModel'
+const jwt = require("jsonwebtoken")
 
 // Auth models
 interface ICredentials {
@@ -9,6 +10,7 @@ interface ICredentials {
 }
 type UserStatus = {
   value: 'admin' | 'user' | 'not_logged'
+  token: string
 }
 class Credentials implements ICredentials {
   username: string
@@ -24,6 +26,10 @@ class Credentials implements ICredentials {
   }
 }
 
+const JWT_KEY = 'abcdef'
+const JWT_EXPIRY = 3600 // 1h
+
+
 // Auth router
 export default async function handler(
   req: NextApiRequest,
@@ -35,25 +41,45 @@ export default async function handler(
 
   // Get user from database
   const user = new Credentials(req.body)
-  const result = await Users.findOne(user)
+  const result = await Users.findOne(user) as User|null
+  let token
+  if(result) {
+    token = jwt.sign({ user }, JWT_KEY, {
+      algorithm: "HS256",
+      expiresIn: JWT_EXPIRY,
+    })
+  }
+  
 
   // return user status (admin, user or not_logged)
   const user_status: UserStatus = {
     value: result ? result.role : 'not_logged',
+    token
   }
   res.status(200).json({ user_status })
 }
 
+
 // SSR: login function
-export async function login(user: ICredentials) {
+export async function login(token: string) {
   // Connect to database
   await dbConnect()
   // Get user from database
-  const result = await Users.findOne(user)
+
+  //decode jwt
+  let payload
+  try {
+    payload = jwt.verify(token, JWT_KEY)
+  } catch (error) {
+    return { logged: false }
+  }
+  
+  const result = await Users.findOne(payload.user)
 
   // return user status
   return {
     logged: result !== null,
     admin: result?.role === 'admin',
+    username: payload.user.username
   }
 }

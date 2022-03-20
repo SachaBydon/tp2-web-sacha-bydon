@@ -14,7 +14,8 @@ type ResultType = {
 
 // Get all assignments by page and filters
 async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
-
+  console.log(req.cookies);
+  
   const { query, sort, page } = getFormatedFilters(req.query)
 
   // Get the data

@@ -27,6 +27,7 @@ export const initAuthContext = () => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false)
   const [admin, setAdmin] = useState<boolean>(false)
   const [username, setUsername] = useState<string>('')
+  const [jwt, setJWT] = useState<string>('')
 
   function login(user: any): Promise<{ valid: boolean }> {
     return new Promise<{ valid: boolean }>((resolve) => {
@@ -38,14 +39,13 @@ export const initAuthContext = () => {
         .then(async (res) => {
           if (res.status === 200) {
             const data = await res.json()
-            const { value: user_status } = data.user_status
-            setCookie(null, 'user', JSON.stringify(user), {
-              maxAge: 30 * 24 * 60 * 60,
-            })
+            const { value: user_status, token } = data.user_status
+            setCookie(null, 'jwt', token, { maxAge: 3600 })
             if (user_status === 'admin' || user_status === 'user') {
               setLoggedIn(true)
               setAdmin(user_status === 'admin')
               setUsername(user.username)
+              setJWT(token)
               resolve({ valid: true })
             } else {
               resolve({ valid: false })
