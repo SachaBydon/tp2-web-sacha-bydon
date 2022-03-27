@@ -22,10 +22,10 @@ Pour ce qui est des bibliothèques, j'ai utilisé material ui ou plutôt <a href
 
 
 ---
-## Fonctionnalités 
-Une vidéo de présentation des fonctionnalités est disponible ici:
-<div>
-  <a href="https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE"><img src="https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" alt="video youtube" style="width: 100%"></a>
+## Fonctionnalités
+<div align="center">Une vidéo de présentation des fonctionnalités est disponible ici:</div>
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=YeKdTNnXsqY"><img src="https://img.youtube.com/vi/YeKdTNnXsqY/0.jpg" alt="video youtube" style="max-width: 400px;"></a>
 </div>
 
 ### Fonctionnalités demandées (100%):
