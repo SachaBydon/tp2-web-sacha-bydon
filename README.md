@@ -3,9 +3,9 @@
   <p align="center">
     Projet effectué par Sacha BYDON
     <br />
-    <a href="https://projet-web-sacha-bydon.herokuapp.com"><strong>Application hébergée »</strong></a>
+    <a href="https://projet-web-sacha-bydon.herokuapp.com"><strong>Application hébergée</strong></a>
     ·
-    <a href="#"><strong>Vidéo de présentation »</strong></a>
+    <a href="#"><strong>Vidéo de présentation</strong></a>
   </p>
 </div>
 
@@ -23,6 +23,10 @@ Pour ce qui est des bibliothèques, j'ai utilisé material ui ou plutôt <a href
 
 ---
 ## Fonctionnalités 
+Une vidéo de présentation des fonctionnalités est disponible ici:
+<div>
+  <a href="https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE"><img src="https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" alt="video youtube" style="width: 100%"></a>
+</div>
 
 ### Fonctionnalités demandées (100%):
 1. [x] Rendre la présentation plus jolie
