@@ -23,8 +23,8 @@ Pour ce qui est des bibliothèques, j'ai utilisé material ui ou plutôt <a href
 
 ---
 ## Fonctionnalités
-<div align="center">Une vidéo de présentation des fonctionnalités est disponible ici:</div>
-<div align="center">
+Une vidéo de présentation des fonctionnalités est disponible ici:
+<div>
   <a href="https://www.youtube.com/watch?v=YeKdTNnXsqY"><img src="https://img.youtube.com/vi/YeKdTNnXsqY/0.jpg" alt="video youtube" style="max-width: 400px;"></a>
 </div>
 
@@ -48,6 +48,7 @@ Pour ce qui est des bibliothèques, j'ai utilisé material ui ou plutôt <a href
 - Il est possible de faire des recherches par nom avec un input text.
 - Il est possible de filtrer les assignments rendu ou non rendu.
 - L'application est responsive (tout format, pc et téléphone).
+- Server side rendering: les données des assignments sont récupérées directement au premier chargement.
 
 
 ---
