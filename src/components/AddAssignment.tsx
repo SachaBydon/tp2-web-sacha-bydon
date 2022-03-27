@@ -11,6 +11,10 @@ import Assignment from '@/types/Assignment'
 import { LoadingFabButton } from '@/components'
 import styles from '@/styles/AddAssignment.module.scss'
 
+/**
+ * Form to add an assignment
+ * @returns {JSX.Element}
+ */
 export default function AddAssignment() {
   const { addAssignment: add } = useAssignmentsContext()
   const firstInputRef: React.RefObject<HTMLInputElement> = useRef(null)
@@ -24,14 +28,12 @@ export default function AddAssignment() {
 
   async function onSubmit(e: any) {
     e.preventDefault()
-    console.log('loading ...')
     setLoading(true)
     await add({
       nom: formValues.name,
       dateDeRendu: formValues.date,
       rendu: false,
     } as Assignment)
-    console.log('added !!!')
     setLoading(false)
     clearForm()
   }

@@ -6,6 +6,11 @@ import { useState } from 'react'
 import { AddAssignment } from '@/components'
 import { useAuthContext } from '@/contexts/AuthContext'
 
+/**
+ * Actions component
+ * Contains the add assignment button and the AddAssignment component
+ * @returns {JSX.Element}
+ */
 export default function Action() {
   const [adding, setAdding] = useState(false)
   const { admin } = useAuthContext()

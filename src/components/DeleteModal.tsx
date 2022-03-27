@@ -15,6 +15,11 @@ type Props = {
   remove: () => void
 }
 
+/**
+ * Delete confirmation modal
+ * @param props {Props}
+ * @returns {JSX.Element}
+ */
 export default function DeleteModal({
   deleting,
   setDeleting,

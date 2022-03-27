@@ -40,6 +40,12 @@ export const AssignmentsContext = createContext<AssignmentsContextType>({
 })
 export const useAssignmentsContext = () => useContext(AssignmentsContext)
 
+
+/**
+ * Assignment context state
+ * @param snackbarContext 
+ * @param router 
+ */
 export const initAssignmentsContext = (
   snackbarContext: SnackbarContextType,
   router: any
@@ -52,6 +58,11 @@ export const initAssignmentsContext = (
   const [page, setPage] = useState<number>(getInitialPage())
   const { push } = snackbarContext
 
+  /**
+   * Fetch backend to add the assignment in the database
+   * @param assignment {Assignment}
+   * @returns assignment {Assignment}
+   */
   function addAssignment(assignment: Assignment) {
     return new Promise((resolve) => {
       fetch('/api/assignments', {
@@ -65,7 +76,6 @@ export const initAssignmentsContext = (
           if (res.status === 200) {
             res.json().then((payload) => {
               payload.data.dateDeRendu = new Date(payload.data.dateDeRendu)
-              console.log(payload.data)
               payload.data.rendu = payload.data.rendu === 'true' ? true : false
               setAssignments((prev) => [...prev, payload.data])
               push(`Assignment ${payload.data.nom} ajouté !`, 'success')
@@ -86,6 +96,13 @@ export const initAssignmentsContext = (
         })
     })
   }
+
+  /**
+   * Fetch backend to update the assignment in the database
+   * @param id assignment id
+   * @param formData data
+   * @returns assignment
+   */
   function updateAssignment(id: string | null, formData: any) {
     return new Promise((resolve) => {
       if (id !== null) {
@@ -130,6 +147,11 @@ export const initAssignmentsContext = (
       }
     })
   }
+
+  /**
+   * Fetch backend to delete the assignment in the database
+   * @param id assignment id
+   */
   function deleteAssignment(id: string) {
     return new Promise((resolve) => {
       fetch('/api/assignments?id=' + id, {
@@ -154,12 +176,12 @@ export const initAssignmentsContext = (
     })
   }
 
+  // Refetch data when filters/page changes
   useEffect(() => {
     if (!firstloaded) {
       setFirstloaded(true)
       return
     }
-    console.log('update')
     setLoading(true)
     const queries = generateFiltersQueries()
 
@@ -192,6 +214,10 @@ export const initAssignmentsContext = (
       })
   }, [filters, page])
 
+  /**
+   * Get initial filters from url
+   * @returns filters
+   */
   function getInitialFilters() {
     const { text, rendu, sort: sort_tring } = router.query
 
@@ -220,11 +246,19 @@ export const initAssignmentsContext = (
     return model
   }
 
+  /**
+   * Get initial filters from url
+   * @returns page
+   */
   function getInitialPage() {
     const { page } = router.query
     return page ? +page : 0
   }
 
+  /**
+   * Generate filters queries to call backend
+   * @returns filters queries
+   */
   function generateFiltersQueries() {
     let queries = `?page=${page ?? 0}`
     if(filters.text.length) queries += `&text=${filters.text}`

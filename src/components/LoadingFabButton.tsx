@@ -10,6 +10,11 @@ type Props = {
   className?: string
 }
 
+/**
+ * Button with a loading indicator
+ * @param props {Props}
+ * @returns {JSX.Element}
+ */
 export default function LoadingFabButton({
   disabled,
   icon,

@@ -56,7 +56,6 @@ export default function Login() {
   // Handle the login button click
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    console.log(formValues)
     setLoading(true)
 
     // Try to login

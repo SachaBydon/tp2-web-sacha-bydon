@@ -23,7 +23,9 @@ export const SnackbarContext = createContext<SnackbarContextType>({
 })
 export const useSnackbar = () => useContext(SnackbarContext)
 
-
+/**
+ * Assignment context state
+ */
 export const initSnackbarContext = () => {
   
   const [snackbar, setSnackbar] = useState(defaultOptions)

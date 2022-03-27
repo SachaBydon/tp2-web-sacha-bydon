@@ -1,7 +1,6 @@
 import {
   Button,
   Modal,
-  Typography,
   FormControlLabel,
   Card,
   CardContent,
@@ -32,6 +31,11 @@ type Props = {
   setSelectedId: (assignmentId: string | null) => void
 }
 
+/**
+ * Modal to view and edit an assignment
+ * @param {Props} props
+ * @returns {JSX.Element}
+ */
 export default function AssignmentDetail({
   assignmentId,
   open,
@@ -46,6 +50,7 @@ export default function AssignmentDetail({
 
   const { formValues, updateForm, setValue, setValues } = useForm({})
 
+  // Update the assignment when the id changes
   useEffect(() => {
     if (assignmentId && assignments) {
       const defaultAssignment =
@@ -67,20 +72,21 @@ export default function AssignmentDetail({
     }
   }, [assignmentId, assignments])
 
+  /**
+   * Update the assignment in the database
+   * @param e event
+   */
   async function onSubmit(e: any) {
     e.preventDefault()
-    console.log(formValues)
-    console.log('loading ...')
     setLoading(true)
-    const { newAssignment }: any = await updateAssignment(assignmentId, formValues)
-    console.log(newAssignment)
-
-    console.log('modifié !!!')
+    await updateAssignment(assignmentId, formValues)
     setLoading(false)
-
     setEditing(false)
   }
 
+  /**
+   * Close the modal
+   */
   function handleClose() {
     setModal(false)
     setEditing(false)

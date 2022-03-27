@@ -14,7 +14,6 @@ type ResultType = {
 
 // Get all assignments by page and filters
 async function getAssignments(req: NextApiRequest, res: NextApiResponse) {
-  console.log(req.cookies);
   
   const { query, sort, page } = getFormatedFilters(req.query)
 
@@ -86,9 +85,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // Database connection
-  console.log('connecting ...')
   await dbConnect()
-  console.log('connected')
 
   // execute the right function depending on the request
   switch (req.method) {
@@ -112,9 +109,7 @@ export default async function handler(
 // Add a lot of data to the database with the data.ts file
 export async function addALotOffAssignments() {
   // Database connection
-  console.log('connecting ...')
   await dbConnect()
-  console.log('connected')
 
   // Filter data
   const assignments: any[] = rawdata
@@ -124,7 +119,6 @@ export async function addALotOffAssignments() {
 
   // Add data to the database
   const result = await Assignments.insertMany(assignments)
-  console.log(result)
 }
 
 // SSR: Get all assignments by page and filters

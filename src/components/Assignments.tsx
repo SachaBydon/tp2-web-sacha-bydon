@@ -23,6 +23,10 @@ import { Close } from '@mui/icons-material'
 import TopBar from './TopBar'
 import DeleteModal from './DeleteModal'
 
+/**
+ * Assignments table list
+ * @returns {JSX.Element}
+ */
 export default function Assignments() {
   const router = useRouter()
 
@@ -47,11 +51,20 @@ export default function Assignments() {
   const [deletingAssignment, setDeletingAssignment] =
     useState<Assignment | null>(null)
 
+  /**
+   * Set the selected assignment
+   * @param id assignment id
+   */
   function changeSelected(id: string | null) {
     setSelectedId(id)
     setOpenModale(true)
   }
 
+  /**
+   * Action buttons for an assignment
+   * @param props {Props}
+   * @returns {JSX.Element}
+   */
   function viewBtn(props: any) {
     return (
       <div style={{ display: 'flex', gap: 16, paddingRight: 16 }}>
@@ -79,6 +92,7 @@ export default function Assignments() {
     )
   }
 
+  // Column definitions of the table
   const columns: GridColDef[] = [
     {
       field: 'nom',
@@ -115,6 +129,10 @@ export default function Assignments() {
     },
   ]
 
+  /**
+   * Update the url with the current filters
+   * @param filters filters
+   */
   function updateUrl(filters: Filter) {
 
     const url = new URL(window.location.href)
@@ -143,19 +161,20 @@ export default function Assignments() {
     window.history.pushState({ path: query }, '', query)
   }
 
+  /**
+   * Delete an assignment
+   */
   async function remove() {
     if (deletingAssignment?._id) {
-      console.log('loading ...')
       setDeleting(false)
       await deleteAssignment(deletingAssignment._id)
-      console.log('deleted !!!')
       setDeleting(false)
       setDeletingAssignment(null)
     }
   }
 
+  // Update the url when the filters/page/selectedId change
   function onFiltersChange(filters: Filter) {
-    console.log('filters', filters)
     updateUrl(filters)
   }
   useEffect(() => {
@@ -164,6 +183,7 @@ export default function Assignments() {
 
   const [filterOpen, setFilterOpen] = useState(false)
 
+  // Debounce the the search input
   let handler: NodeJS.Timeout | null = null
   function onDebounceSearchChange(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value

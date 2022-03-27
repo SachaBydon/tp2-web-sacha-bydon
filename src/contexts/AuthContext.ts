@@ -23,12 +23,21 @@ export const AuthContext = createContext<AuthContextType>({
 })
 export const useAuthContext = () => useContext(AuthContext)
 
+
+/**
+ * Assignment context state
+ */
 export const initAuthContext = () => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false)
   const [admin, setAdmin] = useState<boolean>(false)
   const [username, setUsername] = useState<string>('')
   const [jwt, setJWT] = useState<string>('')
 
+  /**
+   * Login user
+   * @param user user data
+   * @returns validity object bool
+   */
   function login(user: any): Promise<{ valid: boolean }> {
     return new Promise<{ valid: boolean }>((resolve) => {
       fetch('/api/auth', {

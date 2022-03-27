@@ -16,7 +16,6 @@ import {
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-// TODO: add doc
 export default function MyApp({ Component, pageProps }: AppProps) {
   //Initialize contexts
   const router = useRouter()
