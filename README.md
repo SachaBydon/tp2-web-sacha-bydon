@@ -1,7 +1,7 @@
 <div align="center">
   <h3 align="center">Projet web - IA2</h3>
   <p align="center">
-    Projet effectué par Sacha BYDON
+    Projet effectué par Sacha BYDON <img src="https://avatars.githubusercontent.com/u/42966540?v=4" alt="img sacha bydon" style="width: 20px;border-radius: 50px;"/>
     <br />
     <a href="https://projet-web-sacha-bydon.herokuapp.com"><strong>Application hébergée</strong></a>
     ·
