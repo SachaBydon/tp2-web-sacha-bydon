@@ -4,9 +4,7 @@
     Projet effectué par Sacha BYDON <img src="https://avatars.githubusercontent.com/u/42966540?v=4" alt="img sacha bydon" style="width: 20px;border-radius: 50px;"/>
     <br />
     <a href="https://projet-web-sacha-bydon.herokuapp.com"><strong>Application hébergée</strong></a>
-    ·
-    <a href="#"><strong>Vidéo de présentation</strong></a>
-  </p>
+     </p>
 </div>
 
 ## À propos du projet
@@ -23,10 +21,6 @@ Pour ce qui est des bibliothèques, j'ai utilisé material ui ou plutôt <a href
 
 ---
 ## Fonctionnalités
-Une vidéo de présentation des fonctionnalités est disponible ici:
-<div>
-  <a href="https://www.youtube.com/watch?v=YeKdTNnXsqY"><img src="https://img.youtube.com/vi/YeKdTNnXsqY/0.jpg" alt="video youtube" style="max-width: 400px;"></a>
-</div>
 
 ### Fonctionnalités demandées (100%):
 1. [x] Rendre la présentation plus jolie
